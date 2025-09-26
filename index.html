@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Первая мировая на землях Беларуси</title>
+
+<!-- Шрифты -->
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;600&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0a0d0b;
+    --bg-2:#0f1a14;
+    --text:#e8f3ea;
+    --muted:#a9b8ae;
+    --acid:#a4ff4f;
+    --acid-2:#59d35a;
+    --wire:#1a2a22;
+    --maxw:1100px;
+    --radius:18px;
+    --shadow:0 10px 40px rgba(0,0,0,.55);
+    --fade: 400ms cubic-bezier(.2,.65,.2,1);
+    --ticker-h: 46px;
+    --focus: 2px solid rgba(164,255,79,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:
+      radial-gradient(1200px 600px at 70% -10%, #13251c 0%, transparent 60%),
+      radial-gradient(900px 500px at 10% 20%, rgba(164,255,79,.06), transparent 60%),
+      linear-gradient(180deg, var(--bg), var(--bg-2));
+    color:var(--text);
+    text-align:center;
+    line-height:1.5;
+    letter-spacing:.2px;
+    overflow-x:hidden;
+    box-shadow: inset 0 0 200px 80px rgba(0,0,0,.55);
+    padding-bottom: var(--ticker-h);
+  }
+
+  /* Бумажная фактура */
+  .paper { pointer-events:none; position:fixed; inset:0; z-index:-3; opacity:.10; mix-blend-mode:multiply;
+    background-image:
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="260" height="260" viewBox="0 0 260 260"><filter id="f"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2" seed="4"/></filter><rect width="100%" height="100%" filter="url(%23f)" opacity="0.45"/></svg>');
+    background-size: 360px 360px;
+  }
+
+  /* Плёночный шум */
+  .noise { pointer-events:none; position:fixed; inset:0; z-index:-1; opacity:.06; mix-blend-mode:overlay;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.5"/></svg>');
+    animation:grain 8s steps(10) infinite;
+  }
+  @keyframes grain{ 0%{transform:translate(0,0)} 10%{transform:translate(-5%,-10%)} 20%{transform:translate(-15%,5%)} 30%{transform:translate(7%,-25%)} 40%{transform:translate(-5%,25%)} 50%{transform:translate(-15%,10%)} 60%{transform:translate(15%,0%)} 70%{transform:translate(0%,15%)} 80%{transform:translate(3%,5%)} 90%{transform:translate(-10%,10%)} 100%{transform:translate(0,0)} }
+
+  a{color:var(--acid); text-decoration:none}
+  img{max-width:100%; height:auto; display:block; margin-inline:auto}
+  :focus-visible{ outline: var(--focus); outline-offset:3px }
+
+  /* Навигация */
+  .nav{
+    position:fixed; inset-inline:0; top:0; z-index:40;
+    display:flex; justify-content:center; gap:14px; padding:12px 10px;
+    background:linear-gradient(180deg, rgba(10,13,11,.86), rgba(10,13,11,.35) 70%, transparent);
+    backdrop-filter:saturate(1.1) blur(6px);
+    border-bottom:1px solid rgba(164,255,79,.12);
+  }
+  .nav a{
+    padding:8px 12px; border:1px solid rgba(164,255,79,.18);
+    border-radius:999px; font-weight:600; font-family:Oswald, sans-serif; letter-spacing:.5px;
+    transition:transform .15s ease, background-color .2s;
+  }
+  .nav a:hover, .nav a:focus-visible{ transform:translateY(-1px); background:rgba(164,255,79,.08); outline:none }
+  .spacer{height:60px}
+
+  /* HERO */
+  .hero{
+    position:relative; min-height:92vh; display:grid; place-items:center; padding:120px 20px 80px;
+    overflow:hidden; isolation:isolate;
+    background:
+      radial-gradient(60% 80% at 50% 0%, rgba(164,255,79,.10), transparent 70%),
+      linear-gradient(180deg, rgba(12,16,14,0) 0%, rgba(12,16,14,.35) 55%, rgba(12,16,14,1) 100%);
+  }
+  .hero::before{
+    content:""; position:absolute; inset:-10% -10% -5% -10%;
+    background:
+      linear-gradient(180deg, rgba(10,13,11,.85), rgba(10,13,11,.2) 40%, rgba(10,13,11,.85)),
+      url('images/fon.jpg') center/cover no-repeat;
+    filter:grayscale(100%) contrast(1.05) brightness(.6);
+    z-index:-2;
+  }
+
+  /* Силуэты + параллакс */
+  .silhouettes{ position:absolute; inset-inline:0; bottom:-2px; pointer-events:none; z-index:-1; opacity:.55; }
+  .silhouettes svg{ position:absolute; bottom:0; fill:#0b130f; stroke:rgba(164,255,79,.08); stroke-width:.6 }
+  .sil-1{ left:-4%; width:min(48vw, 720px) }
+  .sil-2{ right:-2%; width:min(44vw, 640px) }
+
+  /* «Туман/газ» */
+  .smoke, .smoke::after{
+    content:""; position:absolute; inset:-20% -20%;
+    background:
+      radial-gradient(220px 140px at 10% 30%, rgba(164,255,79,.12), transparent 60%),
+      radial-gradient(260px 160px at 80% 40%, rgba(164,255,79,.10), transparent 60%),
+      radial-gradient(240px 180px at 60% 80%, rgba(164,255,79,.09), transparent 60%),
+      radial-gradient(180px 120px at 40% 10%, rgba(164,255,79,.08), transparent 60%);
+    mix-blend-mode:screen; filter:blur(16px) saturate(1.1);
+    animation: drift 26s linear infinite;
+    z-index:-1;
+  }
+  .smoke::after{ animation: drift2 34s linear infinite; opacity:.85; }
+  @keyframes drift{ 0%{transform:translate(-2%, -1%) scale(1.05)} 50%{transform:translate(3%, 2%) scale(1.08)} 100%{transform:translate(-2%, -1%) scale(1.05)} }
+  @keyframes drift2{ 0%{transform:translate(3%, 2%) scale(1)} 50%{transform:translate(-2%, -3%) scale(1.05)} 100%{transform:translate(3%, 2%) scale(1)} }
+
+  /* Штамп-логотип */
+  .stamp-logo{
+    position:absolute; top:18px; left:16px; z-index:5;
+    font-family:'UnifrakturCook', Oswald, sans-serif; text-transform:uppercase;
+    font-size: clamp(18px, 2.2vw, 28px); letter-spacing:1px; color:#d7f7d9;
+    padding:6px 14px; border:2px solid rgba(164,255,79,.28); border-radius:7px;
+    transform: rotate(-6deg);
+    box-shadow:0 0 0 2px rgba(164,255,79,.12) inset, 0 6px 18px rgba(0,0,0,.35);
+    background:linear-gradient(180deg, rgba(164,255,79,.06), rgba(164,255,79,.02));
+  }
+  .stamp-logo::after{
+    content:"• Восточный фронт •";
+    display:block; margin-top:2px; font:700 10px Oswald, sans-serif; letter-spacing:.35em; color:rgba(164,255,79,.85);
+    text-align:center;
+  }
+
+  .hero h1{
+    font-family:Oswald, sans-serif;
+    font-size: clamp(40px, 6vw, 92px);
+    line-height:1.02;
+    margin:0 0 12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    text-shadow: 0 0 12px rgba(164,255,79,.2), 0 0 2px rgba(164,255,79,.4);
+  }
+  /* Машинка */
+  .type{ display:inline-block; border-right:2px solid rgba(164,255,79,.6); white-space:pre; overflow:hidden; }
+  .type.done{ border-color:transparent }
+
+  /* Газетное «мерцание» */
+  .hero p.lead{ max-width:900px; margin:0 auto 26px; font-size: clamp(16px, 2vw, 20px); color:var(--muted); animation:newsflick 8s ease-in-out infinite both; }
+  @keyframes newsflick{ 0%,9%,11%,100% { opacity:1; text-shadow:none } 10%{ opacity:.86; text-shadow:0 0 6px rgba(164,255,79,.06) } 52%{ opacity:.98 } 70%{ opacity:.94 } }
+
+  .badge{
+    display:inline-block; padding:6px 12px; border-radius:999px;
+    border:1px solid rgba(164,255,79,.25); background:rgba(164,255,79,.06);
+    font-weight:600; letter-spacing:.6px; text-transform:uppercase; font-size:12px; color:#d7f7d9;
+  }
+  .down{
+    display:inline-block; margin-top:22px; padding:10px 16px; border-radius:999px;
+    border:1px solid rgba(164,255,79,.25); background:rgba(164,255,79,.08);
+    font-weight:700; letter-spacing:.6px; transition:transform .2s;
+  }
+  .down:hover, .down:focus-visible{ transform:translateY(2px); outline:none }
+
+  /* Кнопка звука */
+  .sound-toggle{
+    position:absolute; right:18px; bottom:18px; z-index:10;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 14px; border-radius:999px; font-weight:700;
+    font-family:Oswald, sans-serif; letter-spacing:.4px;
+    border:1px solid rgba(164,255,79,.28);
+    background:rgba(164,255,79,.08); color:var(--text);
+    box-shadow:0 4px 18px rgba(0,0,0,.35);
+    transition:transform .15s ease, background-color .2s ease, border-color .2s ease;
+  }
+  .sound-toggle[aria-pressed="true"]{ background:rgba(164,255,79,.16); border-color:rgba(164,255,79,.45); }
+  .sound-toggle:hover{ transform:translateY(1px) }
+  .sound-toggle .dot{ width:8px; height:8px; border-radius:50%; background:#b24e4e; box-shadow:0 0 8px rgba(178,78,78,.45); }
+  .sound-toggle[aria-pressed="true"] .dot{ background:var(--acid); box-shadow:0 0 10px rgba(164,255,79,.55); }
+
+  /* Секции / контейнер */
+  section{ padding:60px 16px; }
+  .wrap{ max-width:var(--maxw); margin-inline:auto }
+
+  /* Блоки статистики */
+  .stats{ display:grid; gap:20px; }
+  .stat{ position:relative; border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(22,36,29,.75), rgba(11,17,14,.9));
+    border:1px solid rgba(164,255,79,.18); box-shadow:var(--shadow); padding:28px 16px; overflow:hidden; }
+  .stat h3{ margin:4px 0 14px; font-family:Oswald, sans-serif; letter-spacing:.6px }
+  .counter{ font-family:Oswald, sans-serif; font-weight:700; letter-spacing:2px; font-size: clamp(42px, 8vw, 86px);
+    text-shadow: 0 0 20px rgba(164,255,79,.2), 0 0 4px rgba(164,255,79,.6); color:var(--acid); }
+  .sub{ color:var(--muted); font-size:14px }
+
+  .stele{
+    background:
+      linear-gradient(180deg, #0c140f, #0a120d 55%, #0c140f),
+      radial-gradient(140px 40px at 50% -10%, rgba(164,255,79,.25), transparent 60%);
+    border:1px solid rgba(164,255,79,.25);
+  }
+  .stele::before{ content:""; position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(100px 30px at 20% 10%, rgba(164,255,79,.12), transparent 60%),
+      radial-gradient(160px 50px at 80% 20%, rgba(164,255,79,.10), transparent 60%),
+      radial-gradient(80px 30px at 60% 85%, rgba(164,255,79,.08), transparent 60%);
+    filter:blur(10px); mix-blend-mode:screen; opacity:.9; animation:breath 6s ease-in-out infinite; }
+  @keyframes breath{ 0%,100%{opacity:.7} 50%{opacity:1} }
+
+  .candles{ display:flex; gap:10px; justify-content:center; margin-top:12px }
+  .candle{ width:5px; height:18px; border-radius:2px; background:linear-gradient(#efffe7, #a4ff4f); filter:blur(.2px); animation:flick 1.6s ease-in-out infinite; opacity:.8 }
+  .candle:nth-child(2){ animation-delay:.3s } .candle:nth-child(3){ animation-delay:.5s }
+  @keyframes flick{ 0%,100%{transform:translateY(0) scaleY(1)} 50%{transform:translateY(-2px) scaleY(1.08)} }
+
+  /* Карта — плейсхолдер */
+  .map{ background: repeating-linear-gradient(45deg, #0f1a14, #0f1a14 14px, #0c1410 14px, #0c1410 28px);
+    border:2px dashed rgba(164,255,79,.35); border-radius:var(--radius); padding:40px 12px; }
+  .map .slot{ height:360px; display:grid; place-items:center; color:var(--muted) }
+
+  /* ХРОНОЛОГИЯ full-bleed */
+  .timeline-bleed{ width:100vw; position:relative; left:50%; right:50%; margin-left:-50vw; margin-right:-50vw;
+    padding: 32px 0 8px; background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
+    border-block:1px solid rgba(255,255,255,.06); }
+  .tl-head{ position:relative; display:flex; align-items:center; justify-content:center; padding: 0 clamp(16px, 4vw, 48px); }
+  .tl-head h3{ margin:0; font-family:Oswald, sans-serif; text-transform:uppercase; text-align:center; }
+  .tl-ctrls{ position:absolute; right: clamp(16px, 4vw, 48px); top:50%; transform:translateY(-50%); display:flex; gap:8px; }
+  .tl-btn{ display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:10px;
+    border:1px solid rgba(164,255,79,.25); background:rgba(164,255,79,.08); color:var(--text); font-weight:700;
+    box-shadow:var(--shadow); transition:transform .15s ease, background .2s ease; }
+  .tl-btn:hover, .tl-btn:focus-visible{ transform:translateY(1px); background:rgba(164,255,79,.14); outline:none }
+
+  .year-scale{ margin-top:6px; display:flex; gap:40px; justify-content:center; padding: 0 clamp(16px, 4vw, 48px);
+    color:var(--muted); font-family:Oswald, Inter, sans-serif; text-transform:uppercase; letter-spacing:.06em; font-size:12px; opacity:.85; }
+  .year-scale .dot{ width:6px; height:6px; border-radius:50%; background: var(--acid); display:inline-block; margin-right:8px; opacity:.8 }
+
+  .timeline{ position:relative; overflow-x:auto; overflow-y:hidden; padding:14px 0 6px;
+    -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; scrollbar-width:none; -ms-overflow-style:none; }
+  .timeline::-webkit-scrollbar{ height:0; display:none }
+
+  .ticks{ position:relative; display:inline-grid; grid-auto-flow:column; grid-auto-columns:min(78ch, 82vw);
+    gap: clamp(16px, 3vw, 28px); align-items:start; padding:28px clamp(16px, 4vw, 48px); }
+  .ticks::before{ content:""; position:absolute; left:0; right:0; top:58px; height:2px;
+    background:linear-gradient(90deg, rgba(164,255,79,.45), rgba(164,255,79,.18)); }
+
+  .tick{ scroll-snap-align:start; position:relative; background:linear-gradient(180deg, rgba(22,36,29,.8), rgba(11,17,14,.95));
+    border:1px solid rgba(164,255,79,.2); border-radius:14px; padding:16px 12px 18px; min-height:160px;
+    box-shadow:var(--shadow); transition:transform .25s var(--fade), box-shadow .4s var(--fade), border-color .4s var(--fade);
+    display:grid; grid-template-columns:120px 1fr; gap:12px; text-align:left; }
+  .tick:hover{ transform:translateY(-3px) }
+  .tick .when{ font-family:Oswald, sans-serif; color:var(--acid); letter-spacing:.06em }
+  .tick strong{ color:#f0e0b6; text-transform:uppercase; font-family:Oswald, sans-serif }
+  .tick p{ margin:6px 0 0; color:#d0dccf; font-size:14px }
+  .tick .media{ grid-column: 1 / -1; margin-top:10px; aspect-ratio:16/9; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.06); }
+  /* Важно: без sepia */
+  .tick .media img{ width:100%; height:100%; object-fit:cover; filter:contrast(1.03) saturate(.95) }
+
+  /* Перmalink якорь */
+  .permalink{ position:absolute; top:8px; right:10px; font:700 14px Oswald, sans-serif; opacity:.0;
+    padding:2px 6px; border-radius:6px; border:1px solid rgba(164,255,79,.22); background:rgba(164,255,79,.06); transition:opacity .2s; }
+  .tick:hover .permalink, .tick:focus-within .permalink{ opacity:.9 }
+  .tick.highlight{ border-color:rgba(164,255,79,.55); box-shadow:0 0 0 2px rgba(164,255,79,.25), 0 0 24px rgba(164,255,79,.18); }
+
+  /* Глоссарий — триггеры (автогенерируемые) */
+  .term{ border:none; background:none; color:#e6fadf; padding:0; cursor:help; text-decoration:underline dotted; text-underline-offset:3px; font-weight:600 }
+
+  /* Popover */
+  .g-popover{ position:fixed; z-index:1000; max-width:min(88vw, 420px); background:linear-gradient(180deg, rgba(22,36,29,.95), rgba(11,17,14,.98));
+    border:1px solid rgba(164,255,79,.35); border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,.6); padding:12px 14px; }
+  .g-popover h5{ margin:0 0 6px; font:700 14px Oswald, sans-serif; letter-spacing:.04em; color:#dff9e1; }
+  .g-popover p{ margin:0; color:#d6e7d8; font-size:14px; }
+  .g-popover .close{ position:absolute; top:6px; right:8px; border:1px solid rgba(164,255,79,.3); background:rgba(164,255,79,.08);
+    color:var(--text); border-radius:8px; padding:2px 8px; font:700 12px Oswald, sans-serif; cursor:pointer }
+  .g-arrow{ position:fixed; width:12px; height:12px; background:linear-gradient(180deg, rgba(22,36,29,.95), rgba(11,17,14,.98));
+    border-left:1px solid rgba(164,255,79,.35); border-top:1px solid rgba(164,255,79,.35); transform:rotate(45deg); z-index:1000 }
+
+  /* Исторические справки */
+  .facts{ display:grid; gap:16px; }
+  .fact{ background:linear-gradient(180deg, rgba(22,36,29,.75), rgba(11,17,14,.95));
+    border:1px solid rgba(164,255,79,.18); border-radius:var(--radius); padding:18px 14px; }
+  .fact h4{ margin:6px 0 8px; font-family:Oswald, sans-serif }
+  .fact p{ margin:0; color:#d5e6d7 }
+
+  /* Осовец */
+  .osovets{ position:relative; overflow:hidden;
+    background:linear-gradient(180deg, rgba(12,18,15,1), rgba(12,18,15,.85)),
+      radial-gradient(120% 80% at 50% -20%, rgba(164,255,79,.12), transparent 60%);
+    border:1px solid rgba(164,255,79,.25); border-radius:var(--radius); box-shadow:var(--shadow); padding:26px 16px; }
+  .osovets h3{ margin:6px 0 10px; font-family:Oswald, sans-serif }
+  .gasline{ height:8px; margin:14px auto 0; max-width:420px; border-radius:999px;
+    background:linear-gradient(90deg, rgba(164,255,79,.1), rgba(164,255,79,.6), rgba(164,255,79,.1)); filter:blur(.2px); animation:flow 6s linear infinite; }
+  @keyframes flow{ 0%{background-position:0 0} 100%{background-position:420px 0} }
+
+  /* Галерея героев */
+  .heroes{ display:grid; gap:16px; }
+  .card{ background:linear-gradient(180deg, rgba(22,36,29,.78), rgba(11,17,14,.98));
+    border:1px solid rgba(164,255,79,.18); border-radius:16px; padding:14px; box-shadow:var(--shadow); cursor:pointer }
+  .avatar{ width:116px; height:116px; border-radius:50%; object-fit:cover; border:2px solid rgba(164,255,79,.25); filter:grayscale(100%) contrast(1.05); }
+  .hero-name{ font-weight:700; font-family:Oswald, sans-serif; margin:10px 0 6px }
+  .hero-meta{ color:var(--muted); font-size:13px; margin:0 0 6px }
+  .hero-desc{ margin:0; color:#d8eadb }
+
+  /* Модал досье героя */
+  dialog#heroModal{ width:min(92vw, 760px); border:none; border-radius:14px; padding:0;
+    background:linear-gradient(180deg, rgba(18,28,23,.98), rgba(10,16,13,.98)); color:var(--text); }
+  dialog#heroModal::backdrop{ background:rgba(0,0,0,.55) }
+  .modal-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; border-bottom:1px solid rgba(164,255,79,.2) }
+  .modal-title{ font:700 20px Oswald, sans-serif; letter-spacing:.04em }
+  .modal-close{ border:1px solid rgba(164,255,79,.3); background:rgba(164,255,79,.08); color:var(--text); border-radius:8px; padding:6px 10px; font:700 13px Oswald, sans-serif; cursor:pointer }
+  .modal-body{ display:grid; grid-template-columns:160px 1fr; gap:16px; padding:16px }
+  .modal-body img{ width:160px; height:160px; object-fit:cover; border-radius:10px; border:2px solid rgba(164,255,79,.25); filter:grayscale(100%) contrast(1.05) }
+  .meta{ color:var(--muted); margin:4px 0 10px; font-size:14px }
+  .bio{ margin:0; color:#d6e7d8; line-height:1.6 }
+
+  /* Аккордеон */
+  .acc{ max-width:var(--maxw); margin-inline:auto; text-align:center }
+  .q{ margin:10px 0; border:1px solid rgba(164,255,79,.2); border-radius:12px; overflow:hidden; background:linear-gradient(180deg, rgba(22,36,29,.7), rgba(11,17,14,.95)); }
+  .q summary{ list-style:none; cursor:pointer; padding:14px 16px; font-weight:700; font-family:Oswald, sans-serif; }
+  .q summary::-webkit-details-marker{ display:none }
+  .q .a{ padding:0 16px 14px; color:#d6e7d8 }
+
+  /* Появления при скролле */
+  .reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s var(--fade), transform .6s var(--fade) }
+  .reveal.show{ opacity:1; transform:none }
+
+  /* Телеграфная лента */
+  .ticker{ position:fixed; left:0; right:0; bottom:0; height:var(--ticker-h);
+    background:linear-gradient(180deg, rgba(22,36,29,.86), rgba(11,17,14,.96));
+    border-top:1px solid rgba(164,255,79,.22); box-shadow:0 -10px 30px rgba(0,0,0,.45);
+    display:flex; align-items:center; gap:12px; padding:0 10px; z-index:60; overflow:hidden; }
+  .ticker .label{ font:700 13px Oswald, sans-serif; color:#d7f7d9; letter-spacing:.6px; padding:6px 10px; border:1px solid rgba(164,255,79,.3); border-radius:6px; background:rgba(164,255,79,.08); }
+  .ticker .viewport{ flex:1; overflow:hidden }
+  .ticker .track{ display:inline-flex; gap:36px; white-space:nowrap; will-change:transform; animation:tape 48s linear infinite; }
+  .ticker:hover .track{ animation-play-state:paused }
+  @keyframes tape{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
+  .ticker .item{ color:var(--muted); font-size:14px }
+  .ticker .dot{ width:6px; height:6px; border-radius:50%; background:var(--acid); display:inline-block; margin:0 10px; opacity:.9 }
+
+  /* Toast */
+  .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:calc(var(--ticker-h) + 18px); z-index:80;
+    background:linear-gradient(180deg, rgba(22,36,29,.96), rgba(11,17,14,.98));
+    color:#dff9e1; border:1px solid rgba(164,255,79,.35); border-radius:10px; padding:10px 14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.45); opacity:0; pointer-events:none; transition:opacity .25s var(--fade), transform .25s var(--fade); }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px) }
+
+  /* Адаптив */
+  @media (min-width:740px){
+    .stats{ grid-template-columns: 1fr; }
+    .facts{ grid-template-columns:1fr 1fr; }
+    .heroes{ grid-template-columns:repeat(3, 1fr); }
+  }
+  @media (min-width:1040px){
+    .facts{ grid-template-columns:repeat(3,1fr); }
+  }
+
+  /* Меньше анимаций */
+  @media (prefers-reduced-motion:reduce){
+    .smoke, .smoke::after, .stele::before, .gasline, .hero p.lead, .ticker .track{ animation:none }
+    .reveal{ transition:none }
+    .type{ border-right:none }
+    .permalink{ transition:none }
+  }
+
+  footer{ padding:40px 12px; color:var(--muted) }
+</style>
+</head>
+<body>
+
+  <div class="paper" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <!-- Навигация -->
+  <nav class="nav" aria-label="Навигация по секциям">
+    <a href="#stats">Цифры</a>
+    <a href="#map">Карта</a>
+    <a href="#timeline">Хронология</a>
+    <a href="#facts">Справки</a>
+    <a href="#osovets">Осовец</a>
+    <a href="#heroes">Герои</a>
+  </nav>
+  <div class="spacer" aria-hidden="true"></div>
+
+  <!-- HERO -->
+  <header class="hero" role="banner">
+    <div class="smoke" aria-hidden="true"></div>
+
+    <!-- Силуэты (SVG) -->
+    <div class="silhouettes" id="silhouettes" aria-hidden="true">
+      <svg class="sil-1" viewBox="0 0 700 220" preserveAspectRatio="xMinYMax">
+        <path d="M0,220 L0,180 C40,170 70,160 90,150 C120,140 120,120 160,120 C190,120 210,140 240,150 C265,160 300,155 320,150 C350,140 360,120 380,118 C420,116 430,138 470,140 C520,142 540,160 560,170 C580,178 620,180 700,178 L700,220 Z" opacity=".9"/>
+        <path d="M70,150 l28,-40 18,6 -14,44 zM180,120 l18,-26 24,8 -10,30 zM300,148 l36,-24 12,10 -18,22 zM420,120 l40,-26 14,10 -22,28 z" opacity=".95"/>
+      </svg>
+      <svg class="sil-2" viewBox="0 0 620 220" preserveAspectRatio="xMaxYMax">
+        <path d="M0,220 L0,188 C40,186 80,182 120,168 C170,150 210,140 260,142 C300,144 330,160 360,166 C400,172 460,166 520,168 C560,170 596,178 620,184 L620,220 Z" opacity=".92"/>
+        <rect x="390" y="132" width="140" height="18" rx="3"/>
+        <rect x="330" y="148" width="90" height="26" rx="4"/>
+        <circle cx="336" cy="180" r="16"/><circle cx="400" cy="180" r="16"/>
+      </svg>
+    </div>
+
+    <!-- Штамп -->
+    <div class="stamp-logo" aria-hidden="true">Первая мировая • Беларусь</div>
+
+    <div class="wrap reveal show">
+      <span class="badge">1914—1918 • Восточный фронт</span>
+      <h1 aria-label="Первая мировая на землях Беларуси"><span id="typeTarget" class="type"></span></h1>
+      <p class="lead">
+        Оборона, наступления и ежедневная человеческая стойкость на линии, разрезавшей Полесье, Виленщину, Гродненщину и Минскую губернию.
+      </p>
+      <a class="down" href="#stats">▼ Смотреть дальше</a>
+    </div>
+
+    <!-- Кнопка управления звуком -->
+    <button class="sound-toggle" id="soundToggle" aria-pressed="false" aria-label="Включить атмосферный звук">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="label">Звук: выкл</span>
+    </button>
+  </header>
+
+  <!-- СТАТИСТИКА -->
+  <section id="stats" class="wrap">
+    <div class="stats">
+      <article class="stat reveal" aria-label="Количество участников из белорусских губерний">
+        <h3>Белорусов, принявших участие</h3>
+        <div class="counter" data-target="1300000">0</div>
+        <div class="sub">на службе в армии Российской империи (оценка, уточняется)</div>
+      </article>
+
+      <article class="stat stele reveal" aria-label="Погибшие уроженцы белорусских земель">
+        <h3>Погибшие</h3>
+        <div class="counter" data-target="300000">0</div>
+        <div class="sub">военные потери среди уроженцев белорусских губерний (оценка)</div>
+        <div class="candles" aria-hidden="true">
+          <span class="candle"></span><span class="candle"></span><span class="candle"></span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- КАРТА (без улучшений) -->
+  <section id="map" class="wrap reveal">
+    <div class="map" role="region" aria-label="Интерактивная карта (скоро)">
+      <h3 style="font-family:Oswald, sans-serif; margin:0 0 8px;">Карта боёв и укрепрайонов</h3>
+      <p class="sub">Здесь позже встраиваем приложение с интерактивной картой (Нарочь, Сморгонь, Барановичи, Осовец и др.).</p>
+      <div class="slot"><strong>Плейсхолдер</strong></div>
+    </div>
+  </section>
+
+  <!-- ХРОНОЛОГИЯ FULL-BLEED -->
+  <section id="timeline" class="timeline-bleed">
+    <div class="tl-head">
+      <h3>Хронология событий 1914—1918</h3>
+      <div class="tl-ctrls">
+        <button class="tl-btn" id="tlPrev" aria-label="Прокрутить левее">◄</button>
+        <button class="tl-btn" id="tlNext" aria-label="Прокрутить правее">►</button>
+      </div>
+    </div>
+
+    <div class="year-scale">
+      <div><span class="dot"></span>1914</div>
+      <div><span class="dot"></span>1915</div>
+      <div><span class="dot"></span>1916</div>
+      <div><span class="dot"></span>1917</div>
+      <div><span class="dot"></span>1918</div>
+    </div>
+
+    <div class="timeline" role="region" aria-label="Хронологическая лента">
+      <div class="ticks" id="tlTrack">
+        <article class="tick reveal" id="tl-1914-08-01">
+          <a class="permalink" href="#tl-1914-08-01" aria-label="Скопировать ссылку на событие">#</a>
+          <div class="when">1 авг 1914</div>
+          <div><strong>Германия объявляет войну России</strong><p>Начало участия Российской империи в мировой войне.</p></div>
+          <figure class="media"><img src="images/1.png" alt="Архивное фото фронта"></figure>
+        </article>
+
+        <article class="tick reveal" id="tl-1915-08-summer">
+          <a class="permalink" href="#tl-1915-08-summer" aria-label="Скопировать ссылку на событие">#</a>
+          <div class="when">авг–сент 1915</div>
+          <div><strong>Летнее наступление Германии</strong><p>Прорыв на Северо-Западном фронте, отход русских войск из Гродненской губернии.</p></div>
+          <figure class="media"><img src="images/2.png" alt="Позиции и проволока"></figure>
+        </article>
+
+        <article class="tick reveal" id="tl-1915-08-osovets">
+          <a class="permalink" href="#tl-1915-08-osovets" aria-label="Скопировать ссылку на событие">#</a>
+          <div class="when">авг 1915</div>
+          <div><strong>Осовец: «Атака мёртвецов»</strong><p>Химатака хлором; контратака гарнизона крепости Осовец.</p></div>
+          <figure class="media"><img src="images/3.jpg" alt="Осовец"></figure>
+        </article>
+
+        <article class="tick reveal" id="tl-1915-09-sventiany">
+          <a class="permalink" href="#tl-1915-09-sventiany" aria-label="Скопировать ссылку на событие">#</a>
+          <div class="when">сент 1915</div>
+          <div><strong>Свентянский прорыв</strong><p>Развитие наступления к Вильне, бои в районе Сморгони.</p></div>
+          <figure class="media"><img src="images/4.png" alt="Сморгонь — укрепления"></figure>
+        </article>
+
+        <article class="tick reveal" id="tl-1916-03-naroch">
+          <a class="permalink" href="#tl-1916-03-naroch" aria-label="Скопировать ссылку на событие">#</a>
+          <div class="when">март 1916</div>
+          <div><strong>Нарочская операция</strong><p>Крупное наступление русской армии у озера Нарочь.</p></div>
+          <figure class="media"><img src="images/5.png" alt="Нарочь — болота и лёд"></figure>
+        </article>
+
+        <article class="tick reveal" id="tl-1916-06-baranovichi">
+          <a class="permalink" href="#tl-1916-06-baranovichi" aria-label="Скопировать ссылку на событие">#</a>
+          <div class="when">июнь–июль 1916</div>
+          <div><strong>Барановичские бои</strong><p>Серия атак на позиции у Барановичей; фронт стабилизируется.</p></div>
+          <figure class="media"><img src="images/6.png" alt="Барановичи — позиции"></figure>
+        </article>
+
+        <article class="tick reveal" id="tl-1915-1917-smorgon">
+          <a class="permalink" href="#tl-1915-1917-smorgon" aria-label="Скопировать ссылку на событие">#</a>
+          <div class="when">1915–1917</div>
+          <div><strong>Сморгонь</strong><p>Долгая позиционная «война бетонных коробок» и артдуэли.</p></div>
+          <figure class="media"><img src="images/7.png" alt="ДОТы и окопы"></figure>
+        </article>
+
+        <article class="tick reveal" id="tl-1917-03-feb-rev">
+          <a class="permalink" href="#tl-1917-03-feb-rev" aria-label="Скопировать ссылку на событие">#</a>
+          <div class="when">март 1917</div>
+          <div><strong>Февральская революция</strong><p>Дезорганизация управления фронтом, падение дисциплины.</p></div>
+          <figure class="media"><img src="images/8.jpg" alt="Фронтовой быт"></figure>
+        </article>
+
+        <article class="tick reveal" id="tl-1917-12-armistice">
+          <a class="permalink" href="#tl-1917-12-armistice" aria-label="Скопировать ссылку на событие">#</a>
+          <div class="when">дек 1917</div>
+          <div><strong>Перемирие</strong><p>Прекращение активных боевых действий; переговоры в Брест-Литовске.</p></div>
+          <figure class="media"><img src="images/9.png" alt="Переговоры"></figure>
+        </article>
+
+        <article class="tick reveal" id="tl-1918-03-03-brest">
+          <a class="permalink" href="#tl-1918-03-03-brest" aria-label="Скопировать ссылку на событие">#</a>
+          <div class="when">3 март 1918</div>
+          <div><strong>Брест-Литовский мир</strong><p>Мирный договор; фронт на белорусских землях прекращает существование.</p></div>
+          <figure class="media"><img src="images/10.jpg" alt="Брест-Литовск"></figure>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- СПРАВКИ (+ глоссарий: просто пометь слова классом .gloss) -->
+  <section id="facts" class="wrap">
+    <h3 style="font-family:Oswald, sans-serif; margin:0 0 10px;">Война на этой территории — что важно знать</h3>
+    <div class="facts reveal">
+      <div class="fact">
+        <h4>Позиционный характер</h4>
+        <p>С осени 1915 года линия фронта на белорусских землях во многом стабилизировалась: укрепления, бетон,
+          <span class="gloss">Колючая проволока</span>, артиллерийские дуэли и <span class="gloss">Минные войны</span>.
+        </p>
+      </div>
+      <div class="fact">
+        <h4>Рельеф и болота Полесья</h4>
+        <p>Местность усложняла манёвр и снабжение, делала прорывы дорогими и редкими. Железные дороги стали критически важны.</p>
+      </div>
+      <div class="fact">
+        <h4>Химическое оружие</h4>
+        <p><span class="gloss">Хлор</span> и смеси применялись на участке фронта; кульминацией стала атака на Осовец (1915).
+           <span class="gloss">Противогазы</span> первых выпусков были дефицитны и несовершенны.
+        </p>
+      </div>
+      <div class="fact">
+        <h4>Города и тыл</h4>
+        <p>Гродно, Барановичи, Минск и Витебск испытывали давление эвакуаций, реквизиций и военной администрации.</p>
+      </div>
+      <div class="fact">
+        <h4>Многонациональный состав</h4>
+        <p>Войска на участке были пёстрыми по происхождению: белорусы, русские, поляки, литовцы, латыши и др.</p>
+      </div>
+      <div class="fact">
+        <h4>Последствия</h4>
+        <p>Разрушения инфраструктуры, демографические потери и политические сдвиги, приведшие к событиям 1917–1918 годов.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ОСОВЕЦ -->
+  <section id="osovets" class="wrap">
+    <article class="osovets reveal">
+      <h3>Крепость Осовец</h3>
+      <p class="sub">Фортификационный узел рубежа по Бебже и Нареву (ныне — Подляское воеводство). В августе 1915 г. гарнизон провёл контратаку после хлорной атаки — эпизод, известный как «Атака мёртвецов».</p>
+      <div class="gasline" aria-hidden="true"></div>
+      <p style="margin-top:12px">Скоро здесь будет отдельная статья, фото и анимация разреза крепости/газовой волны.</p>
+    </article>
+  </section>
+
+  <!-- ГЕРОИ (кликабельно для досье, данные — из JSON по data-id) -->
+  <section id="heroes" class="wrap">
+    <h3 style="font-family:Oswald, sans-serif; margin:0 0 8px;">Судьбы людей и героизм</h3>
+    <p class="sub" style="margin-bottom:16px">Фото • краткая биография • заслуги</p>
+
+    <div class="heroes reveal" role="list">
+      <article class="card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="heroModal" data-id="h1">
+        <img class="avatar" src="images/portret.jpg" alt="Портрет героя 1">
+        <div class="hero-name">Имя Фамилия</div>
+        <div class="hero-meta">уроженец Минской губернии • пехота</div>
+        <p class="hero-desc">Награждён за вынос раненых из-под огня под Сморгонью летом 1916&nbsp;г.</p>
+      </article>
+
+      <article class="card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="heroModal" data-id="h2">
+        <img class="avatar" src="images/portret.jpg" alt="Портрет героя 2">
+        <div class="hero-name">Имя Фамилия</div>
+        <div class="hero-meta">уроженец Виленской губ. • сапёры</div>
+        <p class="hero-desc">Руководил минными работами при обороне бетонных дотов у Барановичей.</p>
+      </article>
+
+      <article class="card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="heroModal" data-id="h3">
+        <img class="avatar" src="images/portret.jpg" alt="Портрет героя 3">
+        <div class="hero-name">Имя Фамилия</div>
+        <div class="hero-meta">уроженка Гродненской губ. • сестра милосердия</div>
+        <p class="hero-desc">Организовала перевязочный пункт и эвакуацию после газовой атаки.</p>
+      </article>
+
+      <article class="card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="heroModal" data-id="h4">
+        <img class="avatar" src="images/portret.jpg" alt="Портрет героя 4">
+        <div class="hero-name">Имя Фамилия</div>
+        <div class="hero-meta">уроженец Витебской губ. • артиллерия</div>
+        <p class="hero-desc">Корректировал огонь в тумане у озера Нарочь, сорвал контратаку.</p>
+      </article>
+
+      <article class="card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="heroModal" data-id="h5">
+        <img class="avatar" src="images/portret.jpg" alt="Портрет героя 5">
+        <div class="hero-name">Имя Фамилия</div>
+        <div class="hero-meta">уроженец Могилёвской губ. • связь</div>
+        <p class="hero-desc">Восстановил линию связи под обстрелом, обеспечив взаимодействие полков.</p>
+      </article>
+
+      <article class="card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="heroModal" data-id="h6">
+        <img class="avatar" src="images/portret.jpg" alt="Портрет героя 6">
+        <div class="hero-name">Имя Фамилия</div>
+        <div class="hero-meta">уроженка Полесья • санитарный поезд</div>
+        <p class="hero-desc">Координировала эвакуацию раненых после артналёта у Сморгони, 1917&nbsp;г.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- МИФЫ / ФАКТЫ -->
+  <section class="wrap">
+    <h3 style="font-family:Oswald, sans-serif; margin:0 0 8px;">Мифы и факты</h3>
+    <div class="acc reveal">
+      <details class="q">
+        <summary>«На белорусском участке фронта почти не применяли газ»</summary>
+        <div class="a">Неверно: зафиксированы эпизоды химических атак, самый известный — у крепости Осовец (1915).</div>
+      </details>
+      <details class="q">
+        <summary>«Здесь не было больших операций»</summary>
+        <div class="a">Были: Нарочская операция и бои у Барановичей — крупные наступления русской армии в 1916 году.</div>
+      </details>
+      <details class="q">
+        <summary>«Вся война прошла быстро»</summary>
+        <div class="a">Наоборот: на многих участках — долгие позиционные бои 1915–1917&nbsp;гг.</div>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    Проект о Первой мировой на землях Беларуси • Дизайн: чёрно-зелёная тема (газ) • © Ваше название
+  </footer>
+
+  <!-- Телеграфная лента -->
+  <div class="ticker" role="region" aria-label="Телеграфная лента сводок 1914–1918">
+    <div class="label">Сводка</div>
+    <div class="viewport">
+      <div class="track" id="tickerTrack">
+        <div class="item">1 авг 1914 — Германия объявила войну Российской империи</div><span class="dot"></span>
+        <div class="item">авг 1915 — Крепость Осовец под газовой атакой, гарнизон контратакует</div><span class="dot"></span>
+        <div class="item">сент 1915 — Свентянский прорыв, бои к востоку от Вильно</div><span class="dot"></span>
+        <div class="item">март 1916 — Наступление у озера Нарочь</div><span class="dot"></span>
+        <div class="item">июнь–июль 1916 — Барановичские бои</div><span class="dot"></span>
+        <div class="item">дек 1917 — Перемирие, Брест-Литовские переговоры</div><span class="dot"></span>
+        <div class="item">3 март 1918 — Подписан Брест-Литовский мир</div><span class="dot"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛ ДЛЯ ГЕРОЯ -->
+  <dialog id="heroModal" aria-labelledby="heroTitle">
+    <div class="modal-head">
+      <div class="modal-title" id="heroTitle">Досье</div>
+      <button class="modal-close" id="heroClose" type="button" aria-label="Закрыть досье">Закрыть</button>
+    </div>
+    <div class="modal-body">
+      <img id="heroImg" src="" alt="">
+      <div>
+        <div class="meta" id="heroMeta"></div>
+        <p class="bio" id="heroBio"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Fallback JSON для ГЕРОЕВ (если внешний файл недоступен) -->
+  <script type="application/json" id="heroesFallback">
+  {
+    "heroes": [
+      {"id":"h1","name":"Имя Фамилия","meta":"уроженец Минской губернии • пехота","bio":"Награждён за вынос раненых из-под огня под Сморгонью летом 1916 г. Командовал отделением во время контратаки.","img":"images/portret.jpg"},
+      {"id":"h2","name":"Имя Фамилия","meta":"уроженец Виленской губ. • сапёры","bio":"Руководил минными работами при обороне бетонных дотов у Барановичей. Организовал связку ходов сообщения.","img":"images/portret.jpg"},
+      {"id":"h3","name":"Имя Фамилия","meta":"уроженка Гродненской губ. • сестра милосердия","bio":"Организовала перевязочный пункт и эвакуацию после газовой атаки. Курсы сестер милосердия окончила в 1914 г.","img":"images/portret.jpg"},
+      {"id":"h4","name":"Имя Фамилия","meta":"уроженец Витебской губ. • артиллерия","bio":"Корректировал огонь в тумане у озера Нарочь, сорвал контратаку. После войны преподавал в артиллерийской школе.","img":"images/portret.jpg"},
+      {"id":"h5","name":"Имя Фамилия","meta":"уроженец Могилёвской губ. • связь","bio":"Восстановил линию связи под обстрелом, обеспечив взаимодействие полков. Награждён Георгиевским крестом.","img":"images/portret.jpg"},
+      {"id":"h6","name":"Имя Фамилия","meta":"уроженка Полесья • санитарный поезд","bio":"Координировала эвакуацию раненых после артналёта у Сморгони, 1917 г. Вела журнал учёта раненых.","img":"images/portret.jpg"}
+    ]
+  }
+  </script>
+
+  <!-- Fallback JSON для ГЛОССАРИЯ -->
+  <script type="application/json" id="glossaryFallback">
+  {
+    "колючая проволока": {"term":"Колючая проволока","def":"Заграждения из проволоки с шипами; ставились в несколько поясов перед позициями."},
+    "минные войны": {"term":"Минные войны","def":"Подкопы и подрывные работы для уничтожения укреплений и траншей противника."},
+    "хлор": {"term":"Хлор","def":"Один из первых боевых ОВ, тяжелее воздуха; вызывал удушье и химические ожоги."},
+    "противогазы": {"term":"Противогазы","def":"Средства защиты дыхания; в 1915–1916 часто использовали марлевые повязки, эффективность была ограничена."}
+  }
+  </script>
+
+<script>
+  // -------- УТИЛИТЫ --------
+  const Toast = (()=>{
+    const el = document.getElementById('toast');
+    let hideT = null;
+    return {
+      show(msg, ms=1600){
+        if(!el) return;
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(hideT);
+        hideT = setTimeout(()=>el.classList.remove('show'), ms);
+      }
+    }
+  })();
+
+  async function tryLoadJSON(url, fallbackId){
+    try{
+      const res = await fetch(url, {cache:'no-store'});
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      return await res.json();
+    }catch(e){
+      const fallback = document.getElementById(fallbackId);
+      if(fallback){
+        try{ return JSON.parse(fallback.textContent); }catch{}
+      }
+      return null;
+    }
+  }
+
+  // Плавный скролл
+  document.querySelectorAll('.nav a, .down').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const href = a.getAttribute('href');
+      if(href && href.startsWith('#')){
+        e.preventDefault();
+        document.querySelector(href).scrollIntoView({behavior:'smooth', block:'start'});
+        history.pushState(null, '', href);
+      }
+    });
+  });
+
+  // Появления при скролле
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){ en.target.classList.add('show'); io.unobserve(en.target); }
+    });
+  },{ threshold:.15 });
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Счётчики
+  const counters = document.querySelectorAll('.counter');
+  const io2 = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      if(!en.isIntersecting) return;
+      const el = en.target;
+      const target = +el.dataset.target || 0;
+      const dur = 1800;
+      const start = performance.now();
+      const step = (t)=>{
+        const p = Math.min(1, (t - start)/dur);
+        const val = Math.floor(target * (0.2 + 0.8*p*p));
+        el.textContent = val.toLocaleString('ru-RU');
+        if(p<1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+      io2.unobserve(el);
+    });
+  },{threshold:.6});
+  counters.forEach(c=>io2.observe(c));
+
+  // Кнопки прокрутки хронологии
+  const tlTrack = document.getElementById('tlTrack');
+  const tl = document.querySelector('.timeline');
+  const tlPrev = document.getElementById('tlPrev');
+  const tlNext = document.getElementById('tlNext');
+  function scrollByCards(dir){
+    if(!tl) return;
+    const first = tlTrack?.firstElementChild;
+    const styleGap = parseFloat(getComputedStyle(tlTrack).columnGap || getComputedStyle(tlTrack).gap || 24);
+    const cardWidth = first ? first.getBoundingClientRect().width : (window.innerWidth*0.8);
+    tl.scrollBy({ left: dir * (cardWidth + styleGap), behavior: 'smooth' });
+  }
+  tlPrev?.addEventListener('click', ()=>scrollByCards(-1));
+  tlNext?.addEventListener('click', ()=>scrollByCards(1));
+
+  // Атмосферный звук + телеграфный «щёлк» (делегирование)
+  (()=>{
+    const btn = document.getElementById('soundToggle');
+    if(!btn) return;
+
+    let ctx, source, gain, lp, hp;
+    const PREF_KEY = 'ww1-sound-on';
+
+    function createNoiseBuffer(context, seconds=2){
+      const rate = context.sampleRate;
+      const length = seconds * rate;
+      const buffer = context.createBuffer(1, length, rate);
+      const data = buffer.getChannelData(0);
+      let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+      for (let i=0;i<length;i++){
+        const white = Math.random()*2-1;
+        b0 = 0.99886*b0 + white*0.0555179;
+        b1 = 0.99332*b1 + white*0.0750759;
+        b2 = 0.96900*b2 + white*0.1538520;
+        b3 = 0.86650*b3 + white*0.3104856;
+        b4 = 0.55000*b4 + white*0.5329522;
+        b5 = -0.7616*b5 - white*0.0168980;
+        const pink = b0+b1+b2+b3+b4+b5+b6 + white*0.5362;
+        b6 = white*0.115926;
+        data[i] = pink * 0.12;
+      }
+      return buffer;
+    }
+    function buildGraph(){
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      gain = ctx.createGain();
+      lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value = 1400; lp.Q.value = 0.4;
+      hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value = 60;
+      source = ctx.createBufferSource();
+      source.buffer = createNoiseBuffer(ctx, 4);
+      source.loop = true;
+      source.connect(hp).connect(lp).connect(gain).connect(ctx.destination);
+      gain.gain.value = 0.0;
+      source.start(0);
+    }
+    function fade(to=0.08, ms=600){
+      if(!ctx || !gain) return;
+      const now = ctx.currentTime;
+      const target = Math.max(0, Math.min(0.25, to));
+      gain.gain.cancelScheduledValues(now);
+      gain.gain.setValueAtTime(gain.gain.value, now);
+      gain.gain.linearRampToValueAtTime(target, now + ms/1000);
+    }
+    function fadeOut(ms=500){
+      if(!ctx || !gain) return;
+      const now = ctx.currentTime;
+      gain.gain.cancelScheduledValues(now);
+      gain.gain.setValueAtTime(gain.gain.value, now);
+      gain.gain.linearRampToValueAtTime(0.0, now + ms/1000);
+    }
+    async function ensureStarted(){
+      if(!ctx){ buildGraph(); }
+      else if (ctx.state === 'suspended'){ try{ await ctx.resume(); }catch{} }
+    }
+    function setUI(on){
+      btn.setAttribute('aria-pressed', on?'true':'false');
+      btn.querySelector('.label').textContent = on ? 'Звук: вкл' : 'Звук: выкл';
+      btn.setAttribute('aria-label', on ? 'Выключить атмосферный звук' : 'Включить атмосферный звук');
+    }
+    async function turnOn(){ await ensureStarted(); setUI(true); localStorage.setItem(PREF_KEY, '1'); fade(0.08, 700); }
+    function turnOff(){ setUI(false); localStorage.setItem(PREF_KEY, '0'); fadeOut(500); }
+    btn.addEventListener('click', async ()=>{
+      const on = btn.getAttribute('aria-pressed') === 'true';
+      if(on){ turnOff(); } else { await turnOn(); }
+    });
+    document.addEventListener('visibilitychange', ()=>{
+      if(!ctx) return;
+      const wantOn = localStorage.getItem(PREF_KEY)==='1';
+      if(document.hidden){ fadeOut(300); }
+      else if(wantOn){ fade(0.08, 500); }
+    });
+
+    function telegraphClick({vol=0.02, freq=1200, dur=0.09}={}){
+      if(!ctx){ buildGraph(); }
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'square'; o.frequency.value = freq;
+      o.connect(g).connect(ctx.destination);
+      const t = ctx.currentTime;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+      o.start(t); o.stop(t+dur+0.01);
+    }
+    // Делегирование для hover/focus (клики-щелчки)
+    const hoverSel = '.nav a, .tl-btn, details.q summary, .down, .term, .permalink';
+    document.addEventListener('mouseover', (e)=>{ if(e.target.closest(hoverSel)) telegraphClick(); }, {passive:true});
+    document.addEventListener('focusin',   (e)=>{ if(e.target.closest(hoverSel)) telegraphClick(); });
+  })();
+
+  // Машинка для H1
+  (()=>{
+    const el = document.getElementById('typeTarget');
+    if(!el) return;
+    const text = 'Первая мировая\nна землях Беларуси';
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){ el.textContent = text; el.classList.add('done'); return; }
+    let i = 0;
+    const total = text.length;
+    const duration = 2800;
+    const start = performance.now();
+    function step(t){
+      const p = Math.min(1, (t - start)/duration);
+      i = Math.max(i, Math.floor(total * p));
+      el.textContent = text.slice(0, i);
+      if(i < total){ requestAnimationFrame(step); }
+      else { el.classList.add('done'); }
+    }
+    requestAnimationFrame(step);
+  })();
+
+  // Параллакс силуэтов
+  (()=>{
+    const el = document.getElementById('silhouettes');
+    if(!el) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce) return;
+    let ticking = false;
+    function onScroll(){
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(()=>{
+        const y = window.scrollY || document.documentElement.scrollTop || 0;
+        el.style.transform = `translate3d(0, ${y * 0.08}px, 0)`;
+        ticking = false;
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+  })();
+
+  // Телеграфная лента — дублируем содержимое
+  (()=>{
+    const track = document.getElementById('tickerTrack');
+    if(!track) return;
+    const content = track.innerHTML;
+    track.innerHTML = content + content;
+  })();
+
+  // ====== ГЛУБОКИЕ ССЫЛКИ ДЛЯ ХРОНОЛОГИИ + КОПИРОВАНИЕ ======
+  (()=>{
+    const tl = document.querySelector('.timeline');
+    if(!tl) return;
+
+    function scrollTimelineTo(id, highlight=true){
+      const card = document.getElementById(id);
+      if(!card) return;
+      const left = card.offsetLeft - (tl.clientWidth * 0.1);
+      tl.scrollTo({ left, behavior: 'smooth' });
+      if(highlight){
+        card.classList.add('highlight');
+        window.setTimeout(()=>card.classList.remove('highlight'), 2400);
+      }
+      document.getElementById('timeline').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    function handleHash(){
+      const hash = (location.hash||'').replace('#','');
+      if(hash && document.getElementById(hash)){
+        scrollTimelineTo(hash, true);
+      }
+    }
+
+    window.addEventListener('hashchange', handleHash);
+    if(location.hash){ setTimeout(handleHash, 60); }
+
+    // Делегирование на # — копируем ссылку и скроллим
+    document.addEventListener('click', async (e)=>{
+      const a = e.target.closest('.permalink');
+      if(!a) return;
+      e.preventDefault();
+      const id = a.getAttribute('href').replace('#','');
+      history.pushState(null, '', '#'+id);
+      scrollTimelineTo(id, true);
+
+      // Копирование ссылки
+      const url = new URL('#'+id, window.location.href).toString();
+      try{
+        await navigator.clipboard.writeText(url);
+        Toast.show('Ссылка скопирована');
+      }catch(err){
+        // fallback
+        const inp = document.createElement('input');
+        inp.value = url; document.body.appendChild(inp); inp.select();
+        try{ document.execCommand('copy'); Toast.show('Ссылка скопирована'); }
+        catch{ Toast.show('Не удалось скопировать'); }
+        finally{ document.body.removeChild(inp); }
+      }
+    });
+  })();
+
+  // ====== ГЛОССАРИЙ: загрузка JSON и автогенерация кнопок ======
+  (()=>{
+    const GLOSSARY_URL = '/data/glossary.json'; // опционально: размести JSON тут
+    let GLOSS = {};
+
+    function toKey(s){ return (s||'').trim().toLowerCase(); }
+
+    function buildTerms(){
+      // Берём все .gloss и превращаем их в .term-кнопки
+      document.querySelectorAll('.gloss').forEach(node=>{
+        const raw = node.textContent.trim();
+        const key = toKey(raw);
+        const hit = GLOSS[key];
+        const btn = document.createElement('button');
+        btn.className = 'term';
+        btn.type = 'button';
+        btn.textContent = hit?.term || raw;
+        btn.dataset.term = hit?.term || raw;
+        btn.dataset.def  = hit?.def  || 'Определение будет добавлено позже.';
+        node.replaceWith(btn);
+      });
+    }
+
+    (async ()=>{
+      const data = await tryLoadJSON(GLOSSARY_URL, 'glossaryFallback');
+      if(data) GLOSS = data;
+      buildTerms();
+      initGlossaryPopover(); // инициализируем поповер после генерации
+    })();
+
+    // Поповер (с делегированием событий)
+    function initGlossaryPopover(){
+      const pop = document.createElement('div');
+      pop.className = 'g-popover';
+      pop.setAttribute('role','dialog');
+      pop.setAttribute('aria-modal','false');
+      pop.style.display = 'none';
+
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'close';
+      closeBtn.type = 'button';
+      closeBtn.textContent = '×';
+      closeBtn.setAttribute('aria-label','Закрыть подсказку');
+
+      const title = document.createElement('h5');
+      const text = document.createElement('p');
+      pop.append(closeBtn, title, text);
+
+      const arrow = document.createElement('div'); arrow.className = 'g-arrow'; arrow.style.display='none';
+
+      document.body.append(pop, arrow);
+
+      let currentTrigger = null;
+
+      function positionPopover(trigger){
+        const rect = trigger.getBoundingClientRect();
+        const gap = 10;
+        const topPref = rect.top + window.scrollY - pop.offsetHeight - gap;
+        const bottomAlt = rect.bottom + window.scrollY + gap;
+        const centerX = rect.left + rect.width/2 + window.scrollX;
+        const left = Math.max(8, Math.min(centerX - pop.offsetWidth/2, document.documentElement.scrollWidth - pop.offsetWidth - 8));
+        let top = topPref;
+        let arrowTop = topPref + pop.offsetHeight - 6;
+        let arrowLeft = Math.max(rect.left + rect.width/2 + window.scrollX - 6, left+12);
+        let above = true;
+
+        if(topPref < window.scrollY + 8){
+          top = bottomAlt;
+          arrowTop = top - 6;
+          above = false;
+        }
+
+        pop.style.left = left+'px';
+        pop.style.top = top+'px';
+        arrow.style.left = (Math.min(Math.max(arrowLeft, left+12), left+pop.offsetWidth-24))+'px';
+        arrow.style.top = arrowTop+'px';
+        arrow.style.transform = above ? 'rotate(45deg)' : 'rotate(225deg)';
+      }
+
+      function open(trigger){
+        currentTrigger = trigger;
+        title.textContent = trigger.dataset.term || 'Термин';
+        text.textContent = trigger.dataset.def || '';
+        pop.style.display = 'block';
+        pop.style.opacity = '0';
+        arrow.style.display = 'block';
+        requestAnimationFrame(()=>{
+          positionPopover(trigger);
+          pop.style.opacity = '1';
+        });
+        trigger.setAttribute('aria-expanded','true');
+      }
+      function close(){
+        if(!currentTrigger) return;
+        currentTrigger.setAttribute('aria-expanded','false');
+        pop.style.display = 'none';
+        arrow.style.display = 'none';
+        currentTrigger = null;
+      }
+
+      document.addEventListener('click', (e)=>{
+        const t = e.target.closest('.term');
+        if(t){
+          e.stopPropagation();
+          if(currentTrigger === t){ close(); }
+          else { open(t); }
+          return;
+        }
+        if(currentTrigger && !pop.contains(e.target)) close();
+      });
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape') close();
+        if((e.key==='Enter'||e.key===' ') && document.activeElement?.classList.contains('term')){
+          e.preventDefault(); document.activeElement.click();
+        }
+      });
+      window.addEventListener('resize', ()=>{ if(currentTrigger) positionPopover(currentTrigger); });
+      window.addEventListener('scroll', ()=>{ if(currentTrigger) positionPopover(currentTrigger); }, {passive:true});
+      closeBtn.addEventListener('click', close);
+    }
+  })();
+
+  // ====== ГЕРОИ: загрузка JSON и открытие досье по data-id ======
+  (()=>{
+    const HEROES_URL = '/data/heroes.json'; // опционально: размести JSON тут
+    let HEROES = new Map();
+
+    function setHeroesMap(json){
+      HEROES.clear();
+      if(!json) return;
+      const arr = Array.isArray(json) ? json : json.heroes;
+      (arr||[]).forEach(h=>{ if(h && h.id) HEROES.set(String(h.id), h); });
+    }
+
+    (async ()=>{
+      const data = await tryLoadJSON(HEROES_URL, 'heroesFallback');
+      setHeroesMap(data);
+    })();
+
+    const dlg = document.getElementById('heroModal');
+    if(!dlg) return;
+    const img = document.getElementById('heroImg');
+    const meta = document.getElementById('heroMeta');
+    const bio = document.getElementById('heroBio');
+    const title = document.getElementById('heroTitle');
+    const closeBtn = document.getElementById('heroClose');
+
+    function openFromData(h){
+      const name = h.name || 'Досье';
+      title.textContent = name;
+      img.src = h.img || '';
+      img.alt = 'Портрет: ' + name;
+      meta.textContent = h.meta || '';
+      bio.textContent = h.bio || '';
+      if(typeof dlg.showModal === 'function'){ dlg.showModal(); }
+      else { dlg.setAttribute('open','open'); document.body.style.overflow='hidden'; }
+      closeBtn.focus();
+    }
+    function close(){
+      if(typeof dlg.close === 'function'){ dlg.close(); }
+      else { dlg.removeAttribute('open'); document.body.style.overflow=''; }
+    }
+    closeBtn.addEventListener('click', close);
+    dlg.addEventListener('cancel', (e)=>{ e.preventDefault(); close(); });
+    dlg.addEventListener('click', (e)=>{
+      const rect = dlg.querySelector('.modal-body').getBoundingClientRect();
+      const head = dlg.querySelector('.modal-head').getBoundingClientRect();
+      if(e.clientY < head.top || e.clientY > rect.bottom || e.clientX < Math.min(head.left, rect.left) || e.clientX > Math.max(head.right, rect.right)){
+        close();
+      }
+    });
+
+    // Делегирование кликов по карточкам
+    document.addEventListener('click', (e)=>{
+      const card = e.target.closest('.card[role="button"][data-id]');
+      if(!card) return;
+      const id = String(card.dataset.id||'').trim();
+      const hero = HEROES.get(id);
+      if(hero){ openFromData(hero); }
+      else{
+        // запасной вариант: собрать из DOM
+        openFromData({
+          name: card.querySelector('.hero-name')?.textContent || 'Досье',
+          meta: card.querySelector('.hero-meta')?.textContent || '',
+          bio:  card.querySelector('.hero-desc')?.textContent || '',
+          img:  card.querySelector('img')?.getAttribute('src') || ''
+        });
+      }
+    });
+    document.addEventListener('keydown', (e)=>{
+      if((e.key==='Enter' || e.key===' ') && document.activeElement?.matches('.card[role="button"]')){
+        e.preventDefault();
+        document.activeElement.click();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
