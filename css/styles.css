@@ -117,6 +117,14 @@
     box-shadow:0 0 0 2px rgba(164,255,79,.12) inset, 0 6px 18px rgba(0,0,0,.35);
     background:linear-gradient(180deg, rgba(164,255,79,.06), rgba(164,255,79,.02));
   }
+  .stamp-info{ position:absolute; top:110px; right:24px; z-index:5; width:230px; padding:14px 18px; text-align:center; font-family:Wremena, serif; font-size:14px; line-height:1.5; letter-spacing:.4px; border:2px solid rgba(164,255,79,.25); border-radius:12px; background:linear-gradient(180deg, rgba(12,18,14,.92), rgba(24,36,28,.78)); box-shadow:0 10px 26px rgba(0,0,0,.38); transform: rotate(8deg); }
+  .stamp-info::before{ content:""; position:absolute; inset:6px; border:1px dashed rgba(164,255,79,.25); border-radius:8px; opacity:.6; }
+  .stamp-info span{ position:relative; display:block; }
+  .stamp-info .stamp-label{ font-size:12px; text-transform:uppercase; color:rgba(209,245,214,.72); letter-spacing:.6px; }
+  .stamp-info .stamp-name{ font-weight:600; color:#f0ffe4; margin:2px 0; }
+  .stamp-info .stamp-phone{ margin-top:6px; font-size:13px; color:rgba(209,245,214,.85); letter-spacing:.4px; }
+  @media (max-width:760px){ .stamp-info{ position:static; margin:16px auto 0; transform:rotate(0); width:min(320px, 92%); } }
+
   .stamp-logo::after{
     content:"• Восточный фронт •";
     display:block; margin-top:2px; font:700 10px Wremena, serif; letter-spacing:.35em; color:rgba(164,255,79,.85);
@@ -320,8 +328,8 @@
   .q .a{ padding:0 16px 14px; color:#d6e7d8 }
 
   /* Появления при скролле */
-  .reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s var(--fade), transform .6s var(--fade) }
-  .reveal.show{ opacity:1; transform:none }
+html.js .reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s var(--fade), transform .6s var(--fade) }
+html.js .reveal.show{ opacity:1; transform:none }
 
   /* Телеграфная лента */
   .ticker{ position:fixed; left:0; right:0; bottom:0; height:var(--ticker-h);
@@ -356,7 +364,7 @@
   /* Меньше анимаций */
   @media (prefers-reduced-motion:reduce){
     .smoke, .smoke::after, .stele::before, .gasline, .hero p.lead, .ticker .track{ animation:none }
-    .reveal{ transition:none }
+html.js .reveal{ transition:none }
     .type{ border-right:none }
     .permalink{ transition:none }
   }
@@ -365,27 +373,69 @@
 
 /* Particles: falling ash/sparks */
 .particles{ position:fixed; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
-.particles .particle{ position:absolute; top:-10vh; width:.14rem; height:.14rem; border-radius:50%;
-  background: radial-gradient(circle, rgba(255,255,255,.85) 0%, rgba(255,255,255,.25) 45%, rgba(255,255,255,0) 70%);
-  filter: blur(.2px); opacity:.35; animation: fall var(--dur,12s) linear infinite; will-change: transform, opacity; }
-.particles .particle.spark{ width:.16rem; height:.16rem; background: radial-gradient(circle, rgba(255,210,120,.9) 0%, rgba(255,210,120,.25) 45%, rgba(255,210,120,0) 70%); opacity:.28; }
-@keyframes fall{ 0%{ transform: translate3d(0,-10vh,0); opacity:.0 } 8%{ opacity:.35 } 100%{ transform: translate3d(0,110vh,0); opacity:.0 } }
+.particles .particle{
+  position:absolute;
+  top:-12vh;
+  width:var(--size,.3rem);
+  height:var(--size,.3rem);
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,244,214,.92) 0%, rgba(255,244,214,.52) 45%, rgba(255,244,214,.14) 70%, rgba(255,244,214,0) 85%);
+  box-shadow:0 0 16px rgba(255,214,140,.48);
+  opacity:var(--alpha,.62);
+  filter:blur(.35px);
+  mix-blend-mode:screen;
+  animation:fall var(--dur,14s) linear infinite;
+  will-change:transform,opacity;
+}
+.particles .particle.spark{
+  background:radial-gradient(circle, rgba(255,214,170,.95) 0%, rgba(255,214,170,.55) 40%, rgba(255,214,170,0) 80%);
+  box-shadow:0 0 22px rgba(255,188,120,.68);
+  opacity:var(--alpha,.75);
+}
+@keyframes fall{
+  0%{ transform:translate3d(var(--drift, 0vw), -16vh, 0); opacity:0; }
+  12%{ opacity:var(--alpha,.62); }
+  100%{ transform:translate3d(calc(var(--drift, 0vw) * .6), 114vh, 0); opacity:0; }
+}
 @media (prefers-reduced-motion: reduce){ .particles{ display:none } }
 
 /* Fog / mist overlay on hero */
-.hero .fog{ content:""; position:absolute; inset:-12% -8%; z-index:-1;
+.hero .fog{ position:absolute; inset:-16% -12%; z-index:0; pointer-events:none;
   background:
-    radial-gradient(60% 30% at 50% 20%, rgba(255,255,255,.06), transparent 70%),
-    radial-gradient(40% 30% at 60% 60%, rgba(255,255,255,.05), transparent 70%),
-    radial-gradient(30% 20% at 40% 80%, rgba(255,255,255,.04), transparent 70%);
-  filter: blur(18px) saturate(1.05);
-  mix-blend-mode: screen;
-  animation: fogMove 42s ease-in-out infinite;
-}
-@keyframes fogMove{ 0%{ transform: translate3d(-1%, -1%, 0) scale(1.02) } 50%{ transform: translate3d(2%, 1.5%, 0) scale(1.05) } 100%{ transform: translate3d(-1%, -1%, 0) scale(1.02) } }
+    radial-gradient(45% 30% at 50% 20%, rgba(255,255,255,.24), rgba(255,255,255,0) 70%),
+    radial-gradient(48% 32% at 62% 62%, rgba(210,240,210,.15), rgba(210,240,210,0) 74%),
+    radial-gradient(32% 26% at 36% 78%, rgba(210,225,210,.12), rgba(210,225,210,0) 70%),
+    linear-gradient(180deg, rgba(34,48,38,.28), rgba(12,18,14,0));
+  filter: blur(26px) saturate(1.18);
+  mix-blend-mode:screen;
+  opacity:.88;
+  animation: fogMove 52s ease-in-out infinite;
+}@keyframes fogMove{ 0%{ transform: translate3d(-1%, -1%, 0) scale(1.02) } 50%{ transform: translate3d(2%, 1.5%, 0) scale(1.05) } 100%{ transform: translate3d(-1%, -1%, 0) scale(1.02) } }
 
 /* Intro readability improvements */
 .intro{ padding: 32px 24px; }
 .intro p{ margin: 0 0 16px; text-indent: 1.6em; font-size: clamp(16px, 1.9vw, 19px); line-height: 1.8; color: #e7f2ea; }
 .intro strong{ color:#f1ffe0; background: linear-gradient(transparent 62%, rgba(164,255,79,.18) 62%); padding: 0 2px; }
 @media (min-width: 900px){ .intro{ padding: 36px 28px } }
+
+html.no-js .reveal{ opacity:1 !important; transform:none !important }
+
+
+
+
+
+  /* Архив */
+  /* Архив */
+  .archive{ max-width:var(--maxw); margin-inline:auto; text-align:center; background:linear-gradient(180deg, rgba(22,36,29,.78), rgba(11,17,14,.96)); border:1px solid rgba(164,255,79,.2); border-radius:var(--radius); box-shadow:var(--shadow); padding:32px 26px; }
+  .archive-head{ max-width:720px; margin:0 auto 28px; }
+  .archive-head h2{ margin:0 0 12px; font-size:clamp(30px, 4.4vw, 44px); text-transform:uppercase; letter-spacing:.06em; }
+  .archive-head p{ margin:0; color:#ceded0; line-height:1.7; }
+  .archive-grid{ display:grid; gap:22px; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); justify-items:center; }
+  .archive-item{ width:100%; max-width:340px; display:flex; flex-direction:column; align-items:center; gap:16px; border:1px solid rgba(164,255,79,.24); border-radius:18px; background:linear-gradient(180deg, rgba(18,28,23,.92), rgba(10,16,13,.98)); padding:20px 18px 24px; box-shadow:0 16px 36px rgba(0,0,0,.38); position:relative; overflow:hidden; }
+  .archive-item::after{ content:""; position:absolute; inset:0; pointer-events:none; border-radius:18px; border:1px solid rgba(164,255,79,.18); opacity:.4; }
+  .archive-item .cover{ width:100%; max-width:200px; aspect-ratio:3/4; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(164,255,79,.24), rgba(164,255,79,.05)); border-radius:12px; overflow:hidden; border:1px solid rgba(164,255,79,.28); }
+  .archive-item .cover img{ width:100%; height:100%; object-fit:cover; mix-blend-mode:screen; opacity:.82; }
+  .archive-body h3{ margin:0 0 10px; font-size:clamp(20px, 3.2vw, 26px); letter-spacing:.04em; }
+  .archive-body p{ margin:0 0 16px; color:#d9eadb; line-height:1.6; }
+  .archive-body .download{ display:inline-flex; align-items:center; justify-content:center; gap:8px; font-weight:600; color:var(--acid); text-decoration:none; padding:9px 18px; border-radius:999px; border:1px solid rgba(164,255,79,.32); background:rgba(164,255,79,.1); transition:transform .18s ease, background-color .2s ease, box-shadow .2s ease; }
+  .archive-body .download:hover, .archive-body .download:focus-visible{ transform:translateY(-2px); background:rgba(164,255,79,.2); box-shadow:0 8px 18px rgba(164,255,79,.18); outline:none; }  .stamp-logo .stamp-sub{ display:block; font:700 12px Wremena, serif; letter-spacing:.35em; margin-top:4px; }
