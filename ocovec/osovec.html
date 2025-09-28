@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>«Атака мёртвецов» — битва за крепость Осовец (1915)</title>
+  <meta name="description" content="Подробная статья об обороне крепости Осовец и знаменитой «атаке мёртвецов» 6 августа 1915 года: предыстория, ход боя, контратака, эвакуация, мифы и факты, память о событии.">
+  <meta name="theme-color" content="#0e0f12" />
+  <style>
+    /* ========= НАСТРОЙКИ/ТОКЕНЫ ========= */
+    :root{
+      --video-zoom: 1.22;
+      --video-vpos: 63%;
+      --bg: #0d0f13;
+      --ink: #e9edf3;
+      --muted: #b8c0cc;
+      --accent: #88c6ff;
+      --card: rgba(20,24,30,.62);
+      --blur: saturate(120%) blur(6px);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+      --maxw: 1080px;
+    }
+    html,body{height:100%}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; font: 16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Inter,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      color:var(--ink); background:var(--bg);
+    }
+
+    /* ========= ВИДЕОФОН ========= */
+    #bg-video{
+      position:fixed; inset:auto 0 0 0; left:50%; top:50%;
+      min-width:100%; min-height:100%; width:auto; height:auto;
+      transform:translate(-50%,-50%) scale(var(--video-zoom));
+      object-fit:cover; object-position: 50% var(--video-vpos);
+      z-index:-2; filter: brightness(.45) contrast(1.05) saturate(.95);
+      will-change: transform, object-position, filter;
+    }
+    .video-overlay{
+      position:fixed; inset:0; z-index:-1;
+      background:
+        radial-gradient(1200px 600px at 80% 10%, rgba(0,0,0,.25), transparent 60%),
+        linear-gradient(to bottom, rgba(8,10,13,.70), rgba(8,10,13,.25) 40%, rgba(8,10,13,.75));
+      pointer-events:none;
+    }
+
+    /* ========= ШАПКА/НАВ ========= */
+    .topbar{
+      position:sticky; top:0; z-index:10; backdrop-filter:var(--blur);
+      background:linear-gradient( to bottom, rgba(14,16,20,.72), rgba(14,16,20,.35) );
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .topbar-inner{
+      max-width:var(--maxw); margin:auto; padding:10px clamp(12px,4vw,22px);
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      text-align:center;
+    }
+    .brand{font-weight:700; letter-spacing:.3px}
+    .brand small{opacity:.65; font-weight:600}
+    .toc{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center; font-size:14px;
+      justify-content:center; width:100%;
+    }
+    .toc a{
+      color:var(--muted); text-decoration:none; padding:6px 10px; border-radius:999px;
+      backdrop-filter:var(--blur);
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(28,32,40,.45);
+      transition:all .25s ease; white-space:nowrap;
+    }
+    .toc a:hover, .toc a.is-active{color:var(--ink); border-color:rgba(255,255,255,.18); background:rgba(46,53,64,.55)}
+
+    /* ========= ХЕДЕР-ГЕРОЙ ========= */
+    header.hero{ padding: clamp(48px, 10vw, 120px) 0 10px; }
+    .container{max-width:var(--maxw); margin:0 auto; padding:0 clamp(12px, 4vw, 22px);}
+    .kicker{color:var(--accent); text-transform:uppercase; letter-spacing:.12em; font-weight:800; font-size:13px}
+    h1{
+      margin:.2em 0 .4em; line-height:1.12; font-weight:900;
+      font-size: clamp(28px, 5vw, 56px);
+      text-wrap:balance; text-shadow: 0 10px 40px rgba(0,0,0,.5);
+    }
+    .lead{ font-size: clamp(16px, 2.2vw, 20px); color:var(--muted); max-width: 70ch; }
+
+    /* ========= КАРТОЧКИ/СЕТКА ========= */
+    section{ margin: clamp(24px, 4.5vw, 40px) 0; }
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .body{ padding: clamp(14px, 3.5vw, 28px); }
+    .card h2{ margin:0 0 .4em; line-height:1.2; font-size: clamp(22px, 3.5vw, 32px); }
+    .muted{color:var(--muted)}
+    .grid{ display:grid; gap: clamp(12px, 2.5vw, 20px); grid-template-columns: 1fr; }
+    @media (min-width: 920px){
+      .grid.cols-2{grid-template-columns: 1.05fr .95fr}
+      .grid.cols-3{grid-template-columns: 1fr 1fr 1fr}
+    }
+
+    /* ========= ФОТО: аккуратные карточки + центрированные подписи ========= */
+    figure{
+      --pic-radius: 14px;
+      --pic-border: rgba(255,255,255,.10);
+      --cap-bg: rgba(20,24,30,.55);
+
+      position: relative;
+      width: min(92%, 720px);          /* компактнее колонки — больше «воздуха» */
+      margin: 6px auto 0;
+      border-radius: var(--pic-radius);
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border: 1px solid var(--pic-border);
+      box-shadow: var(--shadow);
+    }
+    figure img{
+      display:block;
+      width:100%;
+      height: clamp(180px, 32vh, 380px);  /* не даём фото быть гигантскими */
+      object-fit: cover;
+      object-position: 50% 50%;
+      transition: transform .25s ease, filter .25s ease;
+      cursor: zoom-in;
+    }
+    figure:hover img{ transform: scale(1.015) }
+
+    figcaption{
+      width:100%;                 /* подпись строго по ширине изображения */
+      text-align:center;          /* центрируем подпись */
+      font-size: 13.5px;
+      line-height:1.4;
+      padding:10px 14px;
+      color:var(--muted);
+      background: var(--cap-bg);
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+
+    .grid.cols-2 figure{ width: 92%; }
+    @media (max-width: 580px){ figure{ width:100% } }
+    figure.portrait img{ height: clamp(240px, 44vh, 520px) }
+
+    /* ========= ПРОГРЕСС/НАВЕРХ ========= */
+    .progress{position:fixed; left:0; top:0; height:3px; background: linear-gradient(90deg, var(--accent), #7fe2d4); width:0%; z-index: 11}
+    .to-top{
+      position:fixed; right:14px; bottom:14px; z-index:10;
+      display:inline-grid; place-items:center; width:42px; height:42px; border-radius:50%;
+      background: rgba(28,32,40,.6); border:1px solid rgba(255,255,255,.12);
+      color:var(--ink); text-decoration:none; font-weight:700;
+      transition: transform .2s ease, opacity .2s ease;
+      opacity:.0; transform: translateY(8px) scale(.98);
+      backdrop-filter: var(--blur);
+    }
+    .to-top.show{opacity:1; transform: translateY(0) scale(1)}
+    .footnotes{font-size:14px}
+
+    /* ========= ЦЕНТР-БЛОК В ШАПКЕ ========= */
+    .center-text{ text-align:center; max-width:900px; margin:60px auto; padding:20px; }
+    .center-text h2{ font-size:20px; font-weight:600; letter-spacing:1px; color:#88c6ff; margin-bottom:8px; }
+    .center-text h1{ font-size:34px; line-height:1.2; margin:0 0 20px; font-weight:800; }
+    .center-text p{ font-size:18px; line-height:1.6; color:#d0d6e2; max-width:70ch; margin:0 auto; }
+
+    /* ========= ЛАЙТБОКС ========= */
+    .lightbox{
+      position: fixed; inset: 0; z-index: 999;
+      display: grid; place-items: center;
+      background:
+        radial-gradient(80vw 60vh at 50% 50%, rgba(0,0,0,.65), rgba(0,0,0,.88)),
+        rgba(0,0,0,.55);
+      backdrop-filter: blur(6px) saturate(110%);
+      opacity: 0; pointer-events: none;
+      transition: opacity .22s ease;
+    }
+    .lightbox.open{
+      opacity: 1; pointer-events: auto;
+    }
+    body.lightbox-open{ overflow: hidden; }
+
+    .lb-frame{
+      display: inline-block;               /* важный трюк: ширина подстраивается под картинку */
+      max-width: 96vw;
+      text-align: left;
+      transform: translateY(6px) scale(.995);
+      transition: transform .22s ease;
+    }
+    .lightbox.open .lb-frame{
+      transform: translateY(0) scale(1);
+    }
+
+    .lb-img{
+      display:block; width:auto; height:auto;
+      max-width: 96vw; max-height: 78vh;   /* комфорт вьюпорт */
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 10px 40px rgba(0,0,0,.55);
+      background: #0a0c10;
+      cursor: zoom-out;
+    }
+    .lb-caption{
+      display:block;
+      width:100%;                          /* подпись ровно шириной картинки */
+      text-align:center;
+      padding: 12px 14px;
+      font-size: 14px; line-height: 1.5;
+      color: var(--muted);
+      background: rgba(16,20,26,.72);
+      border: 1px solid rgba(255,255,255,.08);
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    }
+
+    .lb-close, .lb-prev, .lb-next{
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px; display:grid; place-items:center;
+      border-radius: 50%; border: 1px solid rgba(255,255,255,.2);
+      background: rgba(20,24,30,.55);
+      color: #fff; font-weight: 800; font-size: 22px;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease, opacity .2s ease;
+      box-shadow: 0 8px 30px rgba(0,0,0,.35);
+    }
+    .lb-prev{ left: max(14px, 3vw) }
+    .lb-next{ right: max(14px, 3vw) }
+    .lb-close{
+      top: max(14px, 2.6vh); right: max(14px, 2.6vh); transform: none;
+      font-size: 22px; width:40px; height:40px; border-radius:10px;
+    }
+    .lb-close:hover, .lb-prev:hover, .lb-next:hover{ background: rgba(36,42,54,.72) }
+    .lb-prev:active, .lb-next:active, .lb-close:active{ transform: translateY(-50%) scale(.98) }
+    .lb-close:active{ transform: scale(.98) }
+
+    .lb-hint{
+      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+      font-size: 12px; color: rgba(230,235,245,.85);
+      background: rgba(12,16,22,.55); padding:6px 10px; border-radius: 999px;
+      border:1px solid rgba(255,255,255,.16);
+    }
+
+    /* Аксессибилити: фокус */
+    .lb-close:focus, .lb-prev:focus, .lb-next:focus{
+      outline: 2px solid #cde5ff; outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      #bg-video{display:none}
+      .video-overlay{background: linear-gradient(to bottom, #0b0c10, #101522)}
+      body{scroll-behavior:auto}
+      figure img{ transition:none }
+      .lightbox{ transition:none }
+      .lb-frame{ transition:none; transform:none }
+      .lb-close, .lb-prev, .lb-next{ transition:none }
+    }
+  </style>
+</head>
+<body>
+  <div id="top"></div>
+
+  <!-- Фон-видео -->
+  <video id="bg-video" autoplay muted loop playsinline>
+    <source src="videoplayback.mp4" type="video/mp4" />
+  </video>
+  <div class="video-overlay" aria-hidden="true"></div>
+  <div class="progress" id="progress"></div>
+
+  <!-- Верхняя панель (центр) -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Осовец — <small>«Атака мёртвецов», 1915</small></div>
+      <nav class="toc" aria-label="Навигация по разделам">
+        <a href="#brief">Кратко</a>
+        <a href="#where">Где это</a>
+        <a href="#background">Предыстория</a>
+        <a href="#gas">Газовая атака</a>
+        <a href="#counter">Контратака</a>
+        <a href="#aftermath">Итоги</a>
+        <a href="#people">Участники</a>
+        <a href="#myths">Мифы/факты</a>
+        <a href="#memory">Память</a>
+        <a href="#sources">Источники</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Центрированный герой -->
+  <section class="center-text">
+    <h2>Первая мировая война — Восточный фронт</h2>
+    <h1>«Атака мёртвецов»: контратака защитников крепости Осовец</h1>
+    <p>Утро 6 августа 1915 (24 июля по старому стилю). После массированного выпуска хлора (местами — со смесью брома) на передовые позиции крепости Осовец немецкая пехота пошла в штурм. 
+      Навстречу ей поднялись отравленные газом защитники. Этот эпизод получит известность как «Атака мёртвецов» — и обрастёт легендами.</p>
+  </section>
+
+  <main class="container">
+
+    <!-- Кратко -->
+    <section id="brief">
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="body">
+            <h2>В двух словах</h2>
+            <p>Крепость Осовец на реке Бобр (ныне Подляское воеводство, Польша) с осени 1914 до августа 1915 года удерживала наступление германских войск. 
+              На рассвете 6&nbsp;августа 1915 года германцы применили хлор (в ряде источников — хлор с бромом) из газобаллонных батарей по вынесенной Сосненской позиции. 
+              Часть гарнизона погибла и была выдавлена с переднего края, но импровизированная контратака — ядро которой составили роты <strong>226-го Землянского пехотного полка</strong> — сорвала штурм. 
+              Через 12 дней, из-за угрозы окружения, гарнизон организованно эвакуировал крепость, предварительно разрушив основные укрепления.</p>
+            <div class="aside">
+              <span class="tag">Дата</span> 6 августа 1915 (24 июля ст. ст.) &middot; 
+              <span class="tag">Место</span> Крепость Осовец
+            </div>
+          </div>
+        </div>
+        <figure>
+          <img src="images/ocovec.jpg" alt="Крепость Осовец — вид укреплений" loading="lazy" />
+          <figcaption>Осовец: земляные валы и капониры замыкали переправы через болотистую долину Бобра.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Где находится -->
+    <section id="where">
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="body">
+            <h2>Где находится крепость Осовец</h2>
+            <p>Осовец (пол. Osowiec-Twierdza) — узел укреплений в излучине реки Бобр, в коридоре между Неманом и линией Висла–Нарев–Буг.
+              Построен Российской империей в 1882–1892 годах и постоянно модернизировался: болотистая местность осложняла подступы, а железная дорога Белосток—Лык—Кёнигсберг и шоссе через крепость придавали ей стратегическое значение.</p>
+            <ul>
+              <li><strong>Форты:</strong> система из четырёх фортов и вынесенных позиций, связанных траншеями;</li>
+              <li><strong>Сосненская позиция:</strong> передовой рубеж на западном берегу, в 2–2,5 км от цитадели;</li>
+              <li><strong>Гарнизон:</strong> к лету 1915 года — многотысячная группировка с крепостной артиллерией, аэростатом и 3 самолётами-разведчиками.</li>
+            </ul>
+          </div>
+        </div>
+        <figure>
+          <img src="images/karta.jpg" alt="Схема района Белостока и долины Бобра" loading="lazy" />
+          <figcaption>Крепость перекрывает сухие проходы через болота.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Предыстория -->
+    <section id="background">
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="body">
+            <h2>Предыстория: осада 1914–1915</h2>
+            <p>Первая крупная попытка взять крепость пришлась на сентябрь 1914 года. Зимой 1915-го последовал многонедельный штурм с тяжёлой артиллерией, но
+              болота и упорная оборона свели усилия на нет. К июлю 1915 года, на фоне общего немецкого наступления, была подготовлена новая операция: к силам, действовавшим на Сосненской позиции,
+              придали полевой инженерный полк, отвечавший за химическое оружие. Решено было <strong>ударить газом</strong>, а затем развернуть пехоту.</p>
+            <p class="muted">В историографии разнятся детали — объёмы газов, точный состав смесей и способ применения (баллоны/снаряды). В большинстве русскоязычных работ — выпуск из баллонов при попутном ветре.</p>
+          </div>
+        </div>
+        <figure>
+          <img src="images/ykrep.gif" alt="Схема укреплений Сосненской позиции" loading="lazy" />
+          <figcaption>Узлы обороны, проволока, редуты.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Газовая атака -->
+    <section id="gas">
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="body">
+            <h2>Газовая атака 6&nbsp;августа&nbsp;1915</h2>
+            <p>На рассвете, около 4:00, при благоприятном ветре по фронту Сосненской позиции начали выпускать <strong>хлор</strong> (в ряде источников — с примесью <em>брома</em>).
+              Газ шёл плотной волной, поражая людей и материальную часть; на переднем крае — тяжёлые потери, часть окопов противник занял.</p>
+            <ul>
+              <li>Отмечают до <em>30 газобаллонных батарей</em> и глубокое проникновение облака;</li>
+              <li>Эффект газа был неравномерен по участкам;</li>
+              <li>Часть резервов в крепости избежала полного поражения.</li>
+            </ul>
+          </div>
+        </div>
+        <figure>
+          <img src="images/gas.jpg" alt="Газовая атака — хлорное облако" loading="lazy" />
+          <figcaption>«Зелёное облако» стекало в низины, заполняя траншеи.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Контратака -->
+    <section id="counter">
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="body">
+            <h2>Контратака, которую назовут «Атакой мёртвецов»</h2>
+            <p>Навстречу наступающим батальонам ландвера поднялись штыковые группы защитников. Ядро — роты <strong>226-го Землянского полка</strong>, прежде всего <strong>13-я рота</strong> подпоручика <strong>Владимира Котлинского</strong>.
+              Контратака вдоль железной дороги заставила противника откатиться с ключевых опорных пунктов.</p>
+            <p>Котлинский был смертельно ранен; завершение удара вели офицеры сапёров (в источниках упоминается <strong>Владислав Стржеминский</strong>). Прорыв ликвидировали, артиллерия накрыла занятые ранее окопы.</p>
+            <div class="aside"><strong>Важно про цифры.</strong> Публицистика даёт образ «60–100 полуживых бойцов против тысяч», тогда как архивные реконструкции чаще говорят о <em>нескольких ротах</em> с нашей стороны и ограниченных штурмовых группах противника.</div>
+          </div>
+        </div>
+        <figure>
+          <img src="images/counter.jpg" alt="Контратака на Сосненской позиции" loading="lazy" />
+          <figcaption>Ход боя усложнял газ и разрывы связи.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Итоги -->
+    <section id="aftermath">
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="body">
+            <h2>Итоги боя и эвакуация крепости</h2>
+            <p>Штурм 6&nbsp;августа сорвали. Но оперативная обстановка ухудшалась: падение Ковно и угрозы от Новогеоргиевска делали удержание Осовца бессмысленным.
+              <strong>18&nbsp;августа&nbsp;1915</strong> гарнизон организованно оставил крепость, предварительно приведя в негодность укрепления и имущество.</p>
+          </div>
+        </div>
+        <figure>
+          <img src="images/aftermath.jpg" alt="Подрыв батарей и складов" loading="lazy" />
+          <figcaption>Стандартная практика при оставлении крепости.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Участники -->
+    <section id="people" class="card">
+      <div class="body">
+        <h2>Подразделения и лица</h2>
+        <div class="grid cols-3">
+          <div>
+            <h3>С нашей стороны</h3>
+            <ul>
+              <li>226-й Землянский пехотный полк (8-я, 12-я, 13-я, 14-я роты);</li>
+              <li>225-й Ливенский пехотный полк (роты 12, 15, 16);</li>
+              <li>444-й Дмитровский пехотный полк (2-й и 3-й батальоны);</li>
+              <li>Крепостные сапёры и ополчение.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Командиры и герои</h3>
+            <ul>
+              <li><strong>Подпоручик Владимир Котлинский</strong> — командир 13-й роты; смертельно ранен;</li>
+              <li><strong>Владислав Стржеминский</strong> — офицер-сапёр;</li>
+              <li><strong>Николай Бржозовский</strong> — комендант крепости.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>С германской стороны</h3>
+            <ul>
+              <li>Части <em>11-й ландверной дивизии</em>;</li>
+              <li>Инженерные подразделения (газобаллонные батареи);</li>
+              <li>Район ответственности группы Хинденбурга.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Мифы и факты -->
+    <section id="myths" class="card">
+      <div class="body">
+        <h2>Мифы и факты: почему разнятся оценки</h2>
+        <ul>
+          <li><strong>Численность защитников.</strong> В публицистике — «несколько десятков», в документах — чаще <em>несколько рот</em>.</li>
+          <li><strong>Численность атакующих.</strong> Нередко действовали <em>усиленные патрульные группы</em>, а не вся масса дивизии.</li>
+          <li><strong>Газ.</strong> Преимущественно <em>хлор</em> из баллонов; в ряде источников — упоминание примеси <em>брома</em> и применения газовых снарядов.</li>
+        </ul>
+        <div class="aside">Вывод: <em>контратака сорвала штурм</em>, но детали зависят от источника — мы приводим несколько перспектив.</div>
+      </div>
+    </section>
+
+    <!-- Память -->
+    <section id="memory">
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="body">
+            <h2>Память и культура</h2>
+            <ul>
+              <li>Памятные знаки в России и Польше; реконструкции.</li>
+              <li>Песни: «Атака мёртвецов» (Ария, 2014), «The Attack of the Dead Men» (Sabaton, 2019).</li>
+              <li>К/м фильм <em>Attack of the Dead Men: Osowiec</em> (Wargaming, 2018).</li>
+            </ul>
+          </div>
+        </div>
+        <figure>
+          <img src="images/pamat.jpg" alt="Современные реконструкции и мемориалы" loading="lazy" />
+          <figcaption>Интерес к событиям Осовца поддерживается мемориалами и реконструкциями.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Источники -->
+    <section id="sources" class="card">
+      <div class="body">
+        <h2>Источники и литература (для быстрой проверки)</h2>
+        <ul class="footnotes">
+          <li>Статья «Атака мёртвецов» (рус.) — сопоставление русских и немецких документов.</li>
+          <li>«Osowiec Fortress» / «Attack of the Dead Men» (англ.) — обзор по англоязычным источникам.</li>
+          <li>С.А. Хмельков, <em>Борьба за Осовец</em> (1939).</li>
+          <li>М.С. Свечников, В.В. Буняковский, <em>Оборона крепости Осовец</em>.</li>
+          <li>А.А. Черкасов и др., <em>Dead Men Attack (Osovets, 1915): Archive Sources Approach</em>.</li>
+          <li>P. Buttar, <em>Germany Ascendant: The Eastern Front 1915</em>.</li>
+        </ul>
+        <p class="muted">Примечание: где оценки расходятся — отмечено явно.</p>
+      </div>
+    </section>
+
+    <p style="text-align:center; opacity:.65; font-size:13px; margin:32px 0 80px">
+      © Страница создана для демонстрации. Фотографии замените на реальные и укажите источники.
+    </p>
+  </main>
+
+  <a href="#top" class="to-top" id="toTop" title="Наверх">↑</a>
+
+  <!-- ЛАЙТБОКС -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр изображения" hidden>
+    <button class="lb-close" id="lbClose" aria-label="Закрыть просмотр">✕</button>
+    <button class="lb-prev" id="lbPrev" aria-label="Предыдущее изображение">‹</button>
+    <button class="lb-next" id="lbNext" aria-label="Следующее изображение">›</button>
+
+    <div class="lb-frame" id="lbFrame" tabindex="-1">
+      <img class="lb-img" id="lbImg" src="" alt="">
+      <div class="lb-caption" id="lbCaption"></div>
+    </div>
+
+    <div class="lb-hint" aria-hidden="true">Esc — закрыть · ⟵ ⟶ — листать</div>
+  </div>
+
+  <script>
+    /* ========= ПРОГРЕСС/КНОПКА ВВЕРХ ========= */
+    const progress = document.getElementById('progress');
+    const toTop = document.getElementById('toTop');
+    const links = [...document.querySelectorAll('.toc a')];
+    const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+    function setProgress(){
+      const scroll = window.scrollY || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = Math.min(100, Math.max(0, (scroll / Math.max(1,height)) * 100));
+      progress.style.width = pct + '%';
+      toTop.classList.toggle('show', scroll > 800);
+    }
+    setProgress();
+    window.addEventListener('scroll', setProgress, {passive:true});
+    window.addEventListener('resize', setProgress);
+
+    // ScrollSpy
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = '#' + entry.target.id;
+        const link = links.find(l => l.getAttribute('href') === id);
+        if(link){
+          if(entry.isIntersecting){
+            links.forEach(x => x.classList.remove('is-active'));
+            link.classList.add('is-active');
+          }
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+    sections.forEach(sec => observer.observe(sec));
+
+    // Плавный скролл по якорям
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if(!a) return;
+      const el = document.querySelector(a.getAttribute('href'));
+      if(el){
+        e.preventDefault();
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+        history.replaceState(null, '', a.getAttribute('href'));
+      }
+    });
+
+    /* ========= ЛАЙТБОКС ========= */
+    (function(){
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lbImg');
+      const lbCaption = document.getElementById('lbCaption');
+      const lbFrame = document.getElementById('lbFrame');
+      const btnPrev = document.getElementById('lbPrev');
+      const btnNext = document.getElementById('lbNext');
+      const btnClose = document.getElementById('lbClose');
+
+      // Собираем все изображения из <figure>
+      const figures = [...document.querySelectorAll('figure')];
+      const items = figures.map((fig, idx) => {
+        const img = fig.querySelector('img');
+        const cap = fig.querySelector('figcaption');
+        // добавим доступность: по Enter/Space тоже открывается
+        fig.setAttribute('tabindex', '0');
+        fig.setAttribute('role', 'button');
+        fig.setAttribute('aria-label', 'Открыть изображение в полноэкранном режиме');
+        return {
+          index: idx,
+          src: img?.getAttribute('src') || '',
+          alt: img?.getAttribute('alt') || '',
+          caption: (cap?.textContent || img?.getAttribute('alt') || '').trim()
+        };
+      }).filter(x => x.src);
+
+      let current = -1;
+      let lastFocus = null;
+
+      function openLightbox(i){
+        if(i < 0 || i >= items.length) return;
+        current = i;
+
+        const it = items[current];
+        lbImg.src = it.src;
+        lbImg.alt = it.alt || '';
+        lbCaption.textContent = it.caption || '';
+
+        lb.removeAttribute('hidden');
+        lb.classList.add('open');
+        document.body.classList.add('lightbox-open');
+
+        lastFocus = document.activeElement;
+        lbFrame.focus();
+
+        // управление видимостью стрелок
+        btnPrev.style.opacity = current > 0 ? '1' : '.35';
+        btnNext.style.opacity = current < items.length - 1 ? '1' : '.35';
+      }
+
+      function closeLightbox(){
+        lb.classList.remove('open');
+        document.body.classList.remove('lightbox-open');
+        setTimeout(() => {
+          lb.setAttribute('hidden','');
+          lbImg.src = '';
+        }, 180);
+        if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+      }
+
+      function showPrev(){ if(current > 0) openLightbox(current - 1) }
+      function showNext(){ if(current < items.length - 1) openLightbox(current + 1) }
+
+      // Клики по figure (и клавиатура)
+      figures.forEach((fig, i) => {
+        fig.addEventListener('click', e => {
+          const img = fig.querySelector('img');
+          if(!img) return;
+          e.preventDefault();
+          openLightbox(i);
+        });
+        fig.addEventListener('keydown', e => {
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault(); openLightbox(i);
+          }
+        });
+      });
+
+      // Кнопки
+      btnClose.addEventListener('click', closeLightbox);
+      btnPrev.addEventListener('click', showPrev);
+      btnNext.addEventListener('click', showNext);
+
+      // Клавиатура
+      document.addEventListener('keydown', e => {
+        if(lb.hasAttribute('hidden')) return;
+        if(e.key === 'Escape') closeLightbox();
+        else if(e.key === 'ArrowLeft') showPrev();
+        else if(e.key === 'ArrowRight') showNext();
+      });
+
+      // Закрытие по клику вне кадра
+      lb.addEventListener('click', e => {
+        const inside = e.target.closest('.lb-frame');
+        const isBtn = e.target.closest('button');
+        if(!inside && !isBtn) closeLightbox();
+      });
+
+      // Прелоад соседних фото для плавной навигации
+      function preload(src){
+        const img = new Image(); img.src = src;
+      }
+      const observerImg = new MutationObserver(() => {
+        const idx = current;
+        if(idx > 0) preload(items[idx-1].src);
+        if(idx < items.length - 1) preload(items[idx+1].src);
+      });
+      observerImg.observe(lbImg, { attributes: true, attributeFilter: ['src'] });
+    })();
+  </script>
+</body>
+</html>
