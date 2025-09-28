@@ -418,6 +418,53 @@ html.js .reveal{ transition:none }
 .intro strong{ color:#f1ffe0; background: linear-gradient(transparent 62%, rgba(164,255,79,.18) 62%); padding: 0 2px; }
 @media (min-width: 900px){ .intro{ padding: 36px 28px } }
 
+.conclusion-block{
+  display:grid;
+  gap:clamp(18px, 3vw, 28px);
+}
+
+.conclusion-heading{
+  margin:0;
+  font-family:Wremena, serif;
+  font-size:clamp(26px, 4vw, 36px);
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:#f4ffe6;
+}
+
+.conclusion-text p:last-child{ margin-bottom:0; }
+
+.conclusion-images{
+  position:relative;
+  margin:clamp(18px, 3vw, 28px) auto 0;
+  width:100%;
+  max-width:50%;
+}
+
+.conclusion-img{
+  display:block;
+  width:100%;
+  height:auto;
+  transition:opacity .4s ease, filter .6s ease, transform .6s ease;
+  filter:none;
+  transform:scale(1);
+}
+
+.conclusion-img.is-hover{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  pointer-events:none;
+}
+
+.conclusion-images:hover .conclusion-img.is-hover,
+.conclusion-images:focus-within .conclusion-img.is-hover{ opacity:1; }
+
+.conclusion-images:hover .conclusion-img.is-default,
+.conclusion-images:focus-within .conclusion-img.is-default{ opacity:0; filter:blur(6px); transform:scale(1.05); }
+
+
+
 html.no-js .reveal{ opacity:1 !important; transform:none !important }
 
 
