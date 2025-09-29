@@ -1,0 +1,15 @@
+figure.portrait img{ height: clamp(240px, 44vh, 520px) }
+
+    /* ========= ╨Я╨а╨Ю╨У╨а╨Х╨б╨б/╨Э╨Р╨Т╨Х╨а╨е ========= */
+    .progress{position:fixed; left:0; top:0; height:3px; background: linear-gradient(90deg, var(--accent), #7fe2d4); width:0%; z-index: 11}
+    .to-top{
+      position:fixed; right:14px; bottom:14px; z-index:10;
+      display:inline-grid; place-items:center; width:42px; height:42px; border-radius:50%;
+      background: rgba(28,32,40,.6); border:1px solid rgba(255,255,255,.12);
+      color:var(--ink); text-decoration:none; font-weight:700;
+      transition: transform .2s ease, opacity .2s ease;
+      opacity:.0; transform: translateY(8px) scale(.98);
+      backdrop-filter: var(--blur);
+    }
+    .to-top.show{opacity:1; transform: translateY(0) scale(1)}
+    .footnotes{font-s

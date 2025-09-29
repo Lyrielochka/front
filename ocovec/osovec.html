@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
@@ -15,16 +15,29 @@
       --ink: #e9edf3;
       --muted: #b8c0cc;
       --accent: #88c6ff;
+      --accent-2: #7fe2d4;
       --card: rgba(20,24,30,.62);
       --blur: saturate(120%) blur(6px);
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius: 16px;
       --maxw: 1080px;
+      --indent: 2.2em;
+      --stamp-bg: rgba(255,255,255,.03);
+      --stamp-ink: #e0f2ff;
     }
+
+    @font-face{
+      font-family:'Wremena';
+      src:url('../Wremena-Bold.ttf') format('truetype');
+      font-weight:700;
+      font-style:normal;
+      font-display:swap;
+    }
+
     html,body{height:100%}
     html{scroll-behavior:smooth}
     body{
-      margin:0; font: 16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Inter,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      margin:0; font: 16px/1.7 system-ui,-apple-system,"Segoe UI",Roboto,Inter,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
       color:var(--ink); background:var(--bg);
     }
 
@@ -35,7 +48,6 @@
       transform:translate(-50%,-50%) scale(var(--video-zoom));
       object-fit:cover; object-position: 50% var(--video-vpos);
       z-index:-2; filter: brightness(.45) contrast(1.05) saturate(.95);
-      will-change: transform, object-position, filter;
     }
     .video-overlay{
       position:fixed; inset:0; z-index:-1;
@@ -71,6 +83,28 @@
     }
     .toc a:hover, .toc a.is-active{color:var(--ink); border-color:rgba(255,255,255,.18); background:rgba(46,53,64,.55)}
 
+    .back-fab{
+      position:fixed;
+      left:clamp(12px, 4vw, 28px);
+      bottom:clamp(14px, 4vw, 32px);
+      width:46px;
+      height:46px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.24);
+      background:rgba(20,24,30,.78);
+      color:var(--ink);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      cursor:pointer;
+      box-shadow:0 12px 30px rgba(0,0,0,.45);
+      transition:transform .25s ease, background .25s ease, box-shadow .25s ease;
+      z-index:22;
+    }
+    .back-fab:hover{ background:rgba(136,198,255,.35); box-shadow:0 16px 36px rgba(30,60,100,.55); transform:translateY(-3px); }
+    .back-fab:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+
     /* ========= ХЕДЕР-ГЕРОЙ ========= */
     header.hero{ padding: clamp(48px, 10vw, 120px) 0 10px; }
     .container{max-width:var(--maxw); margin:0 auto; padding:0 clamp(12px, 4vw, 22px);}
@@ -80,6 +114,7 @@
       font-size: clamp(28px, 5vw, 56px);
       text-wrap:balance; text-shadow: 0 10px 40px rgba(0,0,0,.5);
     }
+    h1, h2, h3, .brand{ font-family:'Wremena', system-ui,-apple-system,"Segoe UI",Roboto,Inter,"Helvetica Neue",Arial,"Noto Sans",sans-serif; }
     .lead{ font-size: clamp(16px, 2.2vw, 20px); color:var(--muted); max-width: 70ch; }
 
     /* ========= КАРТОЧКИ/СЕТКА ========= */
@@ -100,35 +135,53 @@
       .grid.cols-3{grid-template-columns: 1fr 1fr 1fr}
     }
 
-    /* ========= ФОТО: аккуратные карточки + центрированные подписи ========= */
+    /* ========= ТЕКСТ/ДЕКОР ========= */
+    .flow-text p{ text-align: justify; text-indent: var(--indent); margin: 0 0 .9em; }
+    .dropcap p:first-child::first-letter{
+      float:left; font-size: 3.1em; line-height:.8; padding:.05em .12em .02em 0; font-weight:900;
+      color:#d9ecff; text-shadow: 0 8px 28px rgba(136,198,255,.35);
+    }
+    .aside{
+      margin:.8em 0 0; padding:.7em 1em; border:1px dashed rgba(255,255,255,.18); border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+      color:var(--muted); font-size:.95em;
+    }
+    .tag{
+      display:inline-block; padding:.25em .6em; border-radius:999px; border:1px solid rgba(255,255,255,.22);
+      background: rgba(28,32,40,.5); color:#d8e7ff; font-weight:700; font-size:.8em; letter-spacing:.03em;
+    }
+    .hr-fancy{
+      height:1px; border:0; margin:18px 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
+    }
+
+    /* ========= ФОТО ========= */
     figure{
       --pic-radius: 14px;
       --pic-border: rgba(255,255,255,.10);
       --cap-bg: rgba(20,24,30,.55);
 
-      position: relative;
-      width: min(92%, 720px);          /* компактнее колонки — больше «воздуха» */
-      margin: 6px auto 0;
+      display: inline-block;
+      width: min(100%, 720px);
+      margin: 6px auto 18px;
       border-radius: var(--pic-radius);
       overflow: hidden;
-      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
       border: 1px solid var(--pic-border);
       box-shadow: var(--shadow);
+      background: none;
     }
     figure img{
       display:block;
       width:100%;
-      height: clamp(180px, 32vh, 380px);  /* не даём фото быть гигантскими */
-      object-fit: cover;
+      height:auto;
+      object-fit: contain;
       object-position: 50% 50%;
-      transition: transform .25s ease, filter .25s ease;
-      cursor: zoom-in;
+      transition: none;     /* без анимаций/зума */
+      cursor: default;      /* без «лупы» */
+      pointer-events: none; /* клики не обрабатываем */
     }
-    figure:hover img{ transform: scale(1.015) }
-
     figcaption{
-      width:100%;                 /* подпись строго по ширине изображения */
-      text-align:center;          /* центрируем подпись */
+      width:100%;
+      text-align:center;
       font-size: 13.5px;
       line-height:1.4;
       padding:10px 14px;
@@ -136,13 +189,105 @@
       background: var(--cap-bg);
       border-top:1px solid rgba(255,255,255,.08);
     }
-
     .grid.cols-2 figure{ width: 92%; }
-    @media (max-width: 580px){ figure{ width:100% } }
-    figure.portrait img{ height: clamp(240px, 44vh, 520px) }
+    /* Крошечный круглый портрет внутри текста */
+.mini-portrait{
+  float:left;
+  width:120px;                 /* общий слот под фото+подпись */
+  margin:2px 14px 8px 0;       /* отступы от текста */
+  text-align:center;
+  background:none;
+  border:none;
+  box-shadow:none;
+}
+.mini-portrait img.photo{
+  width:100px;
+  aspect-ratio:1 / 1;
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+  margin:0 auto;
+  border:2px solid rgba(255,255,255,.15);
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+  background:#0c1016;
+}
+.mini-portrait figcaption{
+  margin:6px 0 0;
+  padding:0;
+  font-size:12px;
+  line-height:1.25;
+  color:var(--muted);
+  background:none;             /* переопределяем общие стили figure */
+  border:none;
+}
+/* Красивое обтекание по окружности */
+.mini-portrait{
+  shape-outside: circle(50%);
+  -webkit-shape-outside: circle(50%);
+}
+
+/* На очень узких экранах поднимем портрет над абзацем */
+@media (max-width: 520px){
+  .mini-portrait{
+    float:none;
+    margin:0 auto 8px;
+  }
+}
+
+
+    /* ========= «ШТАМП» ========= */
+    .stamp{
+      position: relative; display:block; max-width: 880px;
+      margin: 36px auto; padding: 28px 32px; text-align:center;
+      border: 2px solid rgba(230,240,255,.35); border-radius: 14px;
+      background:
+        radial-gradient(180% 160% at 50% 20%, rgba(140,180,255,.06), transparent 70%),
+        linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.015));
+      box-shadow: 0 10px 28px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.04);
+      color: var(--stamp-ink); font-size: 1.1em; line-height: 1.55; letter-spacing:.025em;
+      transform: rotate(-0.8deg);
+    }
+    .stamp small{
+      position:absolute; top:-14px; left:18px; font-weight:800; text-transform:uppercase;
+      letter-spacing:.22em; font-size:11px; color:#a5d2ff;
+      background:#0f141b; padding:5px 9px; border-radius:8px; border:1px solid rgba(255,255,255,.15);
+      transform: rotate(0.9deg); box-shadow:0 3px 8px rgba(0,0,0,.35);
+    }
+    .stamp p{ margin:.45em 0; text-indent:0; font-style: italic; text-shadow: 0 1px 4px rgba(0,0,0,.4); }
+    .stamp p:first-of-type{ font-size:1.2em; font-weight:600; color:#d9ecff; }
+
+    /* ========= СТАТ-БЕЙДЖИ ========= */
+    .stat-badges{
+      display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:10px; margin: 10px 0 12px;
+    }
+    .stat-badge{
+      padding:12px 12px; border:1px solid rgba(255,255,255,.12); border-radius:12px;
+      background: rgba(30,36,46,.55); text-align:center; box-shadow: 0 6px 20px rgba(0,0,0,.25);
+    }
+    .stat-badge .label{ display:block; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#b9c8da; margin-bottom:6px; font-weight:800; }
+    .stat-badge .value{ font-size:20px; font-weight:900 }
+
+    /* ========= МИНИ-ТАЙМЛАЙН ========= */
+    .mini-timeline{
+      position: relative;
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      row-gap: 10px; column-gap: 16px;
+      margin: 14px 0 6px; align-items: start;
+    }
+    .mini-timeline::before{
+      content:""; position:absolute; left:88px; top:0; bottom:0; width:2px;
+      background: linear-gradient(180deg, var(--accent), transparent 70%); border-radius:2px;
+    }
+    .moment{ display: contents; }
+    .moment-time{
+      grid-column:1; text-align:right; color:#d0e6ff; font-weight:800; letter-spacing:.05em;
+      white-space:nowrap; font-variant-numeric: tabular-nums;
+    }
+    .moment p{ grid-column:2; margin:0; color:#dbe5f2; }
 
     /* ========= ПРОГРЕСС/НАВЕРХ ========= */
-    .progress{position:fixed; left:0; top:0; height:3px; background: linear-gradient(90deg, var(--accent), #7fe2d4); width:0%; z-index: 11}
+    .progress{position:fixed; left:0; top:0; height:3px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); width:0%; z-index: 11}
     .to-top{
       position:fixed; right:14px; bottom:14px; z-index:10;
       display:inline-grid; place-items:center; width:42px; height:42px; border-radius:50%;
@@ -156,101 +301,89 @@
     .footnotes{font-size:14px}
 
     /* ========= ЦЕНТР-БЛОК В ШАПКЕ ========= */
-    .center-text{ text-align:center; max-width:900px; margin:60px auto; padding:20px; }
-    .center-text h2{ font-size:20px; font-weight:600; letter-spacing:1px; color:#88c6ff; margin-bottom:8px; }
-    .center-text h1{ font-size:34px; line-height:1.2; margin:0 0 20px; font-weight:800; }
-    .center-text p{ font-size:18px; line-height:1.6; color:#d0d6e2; max-width:70ch; margin:0 auto; }
-
-    /* ========= ЛАЙТБОКС ========= */
-    .lightbox{
-      position: fixed; inset: 0; z-index: 999;
-      display: grid; place-items: center;
-      background:
-        radial-gradient(80vw 60vh at 50% 50%, rgba(0,0,0,.65), rgba(0,0,0,.88)),
-        rgba(0,0,0,.55);
-      backdrop-filter: blur(6px) saturate(110%);
-      opacity: 0; pointer-events: none;
-      transition: opacity .22s ease;
-    }
-    .lightbox.open{
-      opacity: 1; pointer-events: auto;
-    }
-    body.lightbox-open{ overflow: hidden; }
-
-    .lb-frame{
-      display: inline-block;               /* важный трюк: ширина подстраивается под картинку */
-      max-width: 96vw;
-      text-align: left;
-      transform: translateY(6px) scale(.995);
-      transition: transform .22s ease;
-    }
-    .lightbox.open .lb-frame{
-      transform: translateY(0) scale(1);
-    }
-
-    .lb-img{
-      display:block; width:auto; height:auto;
-      max-width: 96vw; max-height: 78vh;   /* комфорт вьюпорт */
-      border-radius: 12px 12px 0 0;
-      box-shadow: 0 10px 40px rgba(0,0,0,.55);
-      background: #0a0c10;
-      cursor: zoom-out;
-    }
-    .lb-caption{
-      display:block;
-      width:100%;                          /* подпись ровно шириной картинки */
+    .center-text{
       text-align:center;
-      padding: 12px 14px;
-      font-size: 14px; line-height: 1.5;
-      color: var(--muted);
-      background: rgba(16,20,26,.72);
-      border: 1px solid rgba(255,255,255,.08);
-      border-top: none;
-      border-radius: 0 0 12px 12px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+      max-width:var(--maxw);
+      margin:60px auto;
+      padding:0 clamp(12px, 4vw, 22px);
+    }
+    .center-text h2{
+      font-size:20px;
+      font-weight:600;
+      letter-spacing:.16em;
+      color:var(--accent);
+      margin-bottom:12px;
+      text-transform:uppercase;
+    }
+    .center-text h1{
+      font-size: clamp(36px, 6vw, 68px);
+      line-height:1.1;
+      margin:0 0 24px;
+      font-weight:900;
+      text-align:center;
+      letter-spacing:.03em;
+      color:#f4f8ff;
+      background:linear-gradient(120deg, rgba(136,198,255,.95), rgba(127,226,212,.75), rgba(136,198,255,.95));
+      background-size:200% 200%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow:0 0 18px rgba(98,158,255,.3);
+      animation: hero-glow 12s ease-in-out infinite;
+    }
+    .center-text p{
+      font-size:18px;
+      line-height:1.7;
+      color:#d0d6e2;
+      margin:0 0 1em;
+      text-align:center;
+      text-indent:0;
+      overflow-wrap:break-word;
+      hyphens:auto;
+    }
+    @keyframes hero-glow{
+      0%,100%{
+        background-position:0% 50%;
+        text-shadow:0 0 16px rgba(98,158,255,.32), 0 0 36px rgba(66,206,189,.2);
+      }
+      50%{
+        background-position:100% 50%;
+        text-shadow:0 0 24px rgba(98,158,255,.45), 0 0 48px rgba(66,206,189,.28);
+      }
     }
 
-    .lb-close, .lb-prev, .lb-next{
-      position: absolute; top: 50%; transform: translateY(-50%);
-      width: 44px; height: 44px; display:grid; place-items:center;
-      border-radius: 50%; border: 1px solid rgba(255,255,255,.2);
-      background: rgba(20,24,30,.55);
-      color: #fff; font-weight: 800; font-size: 22px;
-      cursor: pointer;
-      transition: transform .2s ease, background .2s ease, opacity .2s ease;
-      box-shadow: 0 8px 30px rgba(0,0,0,.35);
+    /* ========= ВИДЕО-ГАЛЕРЕЯ ========= */
+    #videos{ margin-top: 8px; }
+    .videos-grid{ display:grid; gap: clamp(12px, 2.5vw, 20px); grid-template-columns: 1fr; }
+    @media (min-width: 780px){ .videos-grid{ grid-template-columns: 1fr 1fr 1fr; } }
+    .video-card{ background: var(--card); border:1px solid rgba(255,255,255,.08); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+    .video-thumb{ position:relative; aspect-ratio: 16/9; background:#0a0d12; overflow:hidden; }
+    .video-thumb img{ width:100%; height:100%; object-fit:cover; display:block; filter: saturate(95%) contrast(1.03) brightness(.95); transition: transform .25s ease, filter .25s ease; }
+    .video-thumb .play{
+      position:absolute; left:50%; top:50%; transform: translate(-50%,-50%);
+      width:72px; height:72px; border-radius:50%; display:grid; place-items:center;
+      background: radial-gradient(circle at 50% 50%, rgba(0,0,0,.35), rgba(0,0,0,.65));
+      border:2px solid rgba(255,255,255,.35); box-shadow: 0 8px 30px rgba(0,0,0,.45);
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
     }
-    .lb-prev{ left: max(14px, 3vw) }
-    .lb-next{ right: max(14px, 3vw) }
-    .lb-close{
-      top: max(14px, 2.6vh); right: max(14px, 2.6vh); transform: none;
-      font-size: 22px; width:40px; height:40px; border-radius:10px;
+    .video-thumb .play::before{
+      content:""; display:block; border-style: solid; border-width: 12px 0 12px 18px;
+      border-color: transparent transparent transparent #fff; margin-left: 4px;
     }
-    .lb-close:hover, .lb-prev:hover, .lb-next:hover{ background: rgba(36,42,54,.72) }
-    .lb-prev:active, .lb-next:active, .lb-close:active{ transform: translateY(-50%) scale(.98) }
-    .lb-close:active{ transform: scale(.98) }
-
-    .lb-hint{
-      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
-      font-size: 12px; color: rgba(230,235,245,.85);
-      background: rgba(12,16,22,.55); padding:6px 10px; border-radius: 999px;
-      border:1px solid rgba(255,255,255,.16);
-    }
-
-    /* Аксессибилити: фокус */
-    .lb-close:focus, .lb-prev:focus, .lb-next:focus{
-      outline: 2px solid #cde5ff; outline-offset: 2px;
+    .video-link{ display:block; color:inherit; text-decoration:none; }
+    .video-link:hover .video-thumb img{ transform: scale(1.03); filter: saturate(100%) contrast(1.06) brightness(1); }
+    .video-link:hover .video-thumb .play{ transform: translate(-50%,-50%) scale(1.05); border-color: rgba(255,255,255,.55); }
+    .video-caption{
+      padding: 10px 12px 12px; text-align:center; font-weight:600; color:#d7e3f4;
+      border-top:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      min-height: 52px; display:flex; align-items:center; justify-content:center;
     }
 
-    @media (prefers-reduced-motion: reduce){
-      #bg-video{display:none}
-      .video-overlay{background: linear-gradient(to bottom, #0b0c10, #101522)}
-      body{scroll-behavior:auto}
-      figure img{ transition:none }
-      .lightbox{ transition:none }
-      .lb-frame{ transition:none; transform:none }
-      .lb-close, .lb-prev, .lb-next{ transition:none }
-    }
+    /* ========= МЕДАЛЬ В АСАЙДЕ ========= */
+    .award-box{ display:flex; align-items:center; gap:12px; }
+    .award-img{ width:64px; height:auto; display:block; image-rendering:auto; border:none; box-shadow:none; background:transparent; }
+    .award-text{ flex:1; }
   </style>
 </head>
 <body>
@@ -275,19 +408,20 @@
         <a href="#counter">Контратака</a>
         <a href="#aftermath">Итоги</a>
         <a href="#people">Участники</a>
-        <a href="#myths">Мифы/факты</a>
         <a href="#memory">Память</a>
         <a href="#sources">Источники</a>
+        <a href="#videos">Видеоматериалы</a>
       </nav>
     </div>
   </div>
 
   <!-- Центрированный герой -->
   <section class="center-text">
-    <h2>Первая мировая война — Восточный фронт</h2>
-    <h1>«Атака мёртвецов»: контратака защитников крепости Осовец</h1>
-    <p>Утро 6 августа 1915 (24 июля по старому стилю). После массированного выпуска хлора (местами — со смесью брома) на передовые позиции крепости Осовец немецкая пехота пошла в штурм. 
-      Навстречу ей поднялись отравленные газом защитники. Этот эпизод получит известность как «Атака мёртвецов» — и обрастёт легендами.</p>
+    <h2>Последний штык над хлориновым облаком</h2>
+    <h1>«Атака мёртвецов»</h1>
+    <h1>Подвиг, ставший вечностью</h1>
+    <p>Утром 6 августа 1915 года (24 июля по старому стилю), на рассвете над болотами Бобра поднялось ядовитое облако — сотни баллонов выпустили хлор с примесью брома. Казалось, что сама земля задохнулась, а крепость Осовец обречена. В этот час германская пехота пошла на штурм, уверенная в своей лёгкой победе. Но из удушливого, зеленоватого тумана навстречу врагу поднялись изуродованные газом, кашлявшие кровью защитники — и именно их отчаянный штыковой натиск вошёл в историю как «Атака мёртвецов».</p>
+    <p>Построенная в 1880-е годы на непроходимых болотах Бобра, крепость преграждала коридор между Неманом и Вислой, удерживая ключ к Белостоку и к глубине русских земель. Здесь, среди проволоки, брустверов и топей, решалась судьба фронта — и память о том дне навсегда осталась символом мужества и трагедии Первой мировой.</p>
   </section>
 
   <main class="container">
@@ -296,43 +430,44 @@
     <section id="brief">
       <div class="grid cols-2">
         <div class="card">
-          <div class="body">
-            <h2>В двух словах</h2>
-            <p>Крепость Осовец на реке Бобр (ныне Подляское воеводство, Польша) с осени 1914 до августа 1915 года удерживала наступление германских войск. 
-              На рассвете 6&nbsp;августа 1915 года германцы применили хлор (в ряде источников — хлор с бромом) из газобаллонных батарей по вынесенной Сосненской позиции. 
-              Часть гарнизона погибла и была выдавлена с переднего края, но импровизированная контратака — ядро которой составили роты <strong>226-го Землянского пехотного полка</strong> — сорвала штурм. 
-              Через 12 дней, из-за угрозы окружения, гарнизон организованно эвакуировал крепость, предварительно разрушив основные укрепления.</p>
-            <div class="aside">
-              <span class="tag">Дата</span> 6 августа 1915 (24 июля ст. ст.) &middot; 
-              <span class="tag">Место</span> Крепость Осовец
-            </div>
+          <div class="body flow-text">
+            <h2>Крепость среди болот</h2>
+            <p>К моменту начала Первой мировой войны польские губернии Российской империи были защищены рядом крепостей. Так, важный железнодорожный узел Белосток прикрывала Осовецкая крепость, которая располагалась недалеко от места впадения в реку Нарев её притока реки Бобр и перекрывала узкий перешеек суши, ограниченный непроходимыми болотами с севера и юга.</p>
+            <p>В силу своего расположения, близкого к довоенной русско-германской границе, крепость подверглась нападению уже в сентябре 1914 года – к её позициям подошли подразделения 8-й германской армии в количестве около 40 батальонов, которые попытались взять штурмом передовые траншеи. В их тылу развернулись 60 штурмовых орудий калибром до 203 мм, что значительно превышало мощность крепостной артиллерии, основную часть которой составляли устаревшие 152-мм пушки образца 1877 года.</p>
+            <p>Осовец с осени 1914-го до августа 1915-го срывал планы противника в Подлясье. На рассвете 6&nbsp;августа газобаллонные батареи накрыли Сосненскую позицию хлором. Первая линия рухнула, но контратака — ядром которой стали роты <strong>226-го Землянского пехотного полка</strong> — отбросила ландвер. Через двенадцать дней, из-за угрозы охвата после падения соседних крепостей, гарнизон организованно эвакуировал Осовец, приведя основные сооружения в негодность.</p>
           </div>
         </div>
         <figure>
-          <img src="images/ocovec.jpg" alt="Крепость Осовец — вид укреплений" loading="lazy" />
-          <figcaption>Осовец: земляные валы и капониры замыкали переправы через болотистую долину Бобра.</figcaption>
+          <img src="images/skh-osoveckiy-ukrn.png" alt="Осовец: земляные валы и капониры" loading="lazy" />
+          <figcaption>Осовец: земляные валы, редуты и болота Бобра замыкали переправы.</figcaption>
         </figure>
       </div>
+
+      <!-- Штамп №1 -->
+      <aside class="stamp" aria-label="Поэтическая вставка">
+        <small>Песня ополченцев</small>
+        <p>«Там, где миру конец, — стоит крепость Осовец;</p>
+        <p>Там страшнейшие болота — немцам лезть в них неохота»</p>
+      </aside>
     </section>
 
     <!-- Где находится -->
     <section id="where">
       <div class="grid cols-2">
         <div class="card">
-          <div class="body">
+          <div class="body flow-text">
             <h2>Где находится крепость Осовец</h2>
-            <p>Осовец (пол. Osowiec-Twierdza) — узел укреплений в излучине реки Бобр, в коридоре между Неманом и линией Висла–Нарев–Буг.
-              Построен Российской империей в 1882–1892 годах и постоянно модернизировался: болотистая местность осложняла подступы, а железная дорога Белосток—Лык—Кёнигсберг и шоссе через крепость придавали ей стратегическое значение.</p>
+            <p>Узел укреплений в излучине реки Бобр (ныне Бебжа) — в коридоре между Неманом и линией Висла–Нарев–Буг. Местность с севера и юга прикрыта непроходимыми болотами. Через крепость проходят железная дорога Белосток—Лык—Кёнигсберг и шоссе — стратегические артерии фронта.</p>
             <ul>
-              <li><strong>Форты:</strong> система из четырёх фортов и вынесенных позиций, связанных траншеями;</li>
-              <li><strong>Сосненская позиция:</strong> передовой рубеж на западном берегу, в 2–2,5 км от цитадели;</li>
-              <li><strong>Гарнизон:</strong> к лету 1915 года — многотысячная группировка с крепостной артиллерией, аэростатом и 3 самолётами-разведчиками.</li>
+              <li><strong>Фортификация:</strong> цитадель и вынесенные позиции, редуты, проволока, капониры;</li>
+              <li><strong>Сосненская позиция:</strong> передовой рубеж, ~2–2,5&nbsp;км от цитадели;</li>
+              <li><strong>Ресурсы:</strong> крепостная артиллерия, аэронаблюдение, связь.</li>
             </ul>
           </div>
         </div>
         <figure>
-          <img src="images/karta.jpg" alt="Схема района Белостока и долины Бобра" loading="lazy" />
-          <figcaption>Крепость перекрывает сухие проходы через болота.</figcaption>
+          <img src="images/karta.jpg" alt="Долина Бобра и подступы к крепости" loading="lazy" />
+          <figcaption>Расположение крепости Осовец на карте.</figcaption>
         </figure>
       </div>
     </section>
@@ -340,108 +475,178 @@
     <!-- Предыстория -->
     <section id="background">
       <div class="grid cols-2">
-        <div class="card">
-          <div class="body">
-            <h2>Предыстория: осада 1914–1915</h2>
-            <p>Первая крупная попытка взять крепость пришлась на сентябрь 1914 года. Зимой 1915-го последовал многонедельный штурм с тяжёлой артиллерией, но
-              болота и упорная оборона свели усилия на нет. К июлю 1915 года, на фоне общего немецкого наступления, была подготовлена новая операция: к силам, действовавшим на Сосненской позиции,
-              придали полевой инженерный полк, отвечавший за химическое оружие. Решено было <strong>ударить газом</strong>, а затем развернуть пехоту.</p>
-            <p class="muted">В историографии разнятся детали — объёмы газов, точный состав смесей и способ применения (баллоны/снаряды). В большинстве русскоязычных работ — выпуск из баллонов при попутном ветре.</p>
+        <div class="card dropcap">
+          <div class="body flow-text">
+            <h2>Предыстория: осады 1914–весна 1915</h2>
+            <p>Первая попытка взять крепость в сентябре 1914 года провалилась. Зимой 1915-го последовал штурм с тяжёлой артиллерией — и снова без решающего успеха. Немцы перешли к позиционной подготовке: наращивали батареи, подтягивали резервы и искали способ разблокировать коридор. К лету 1915-го <strong>11-я ландверная дивизия</strong> готовила новый бросок — с применением отравляющих веществ по передовым Сосненской и Заречной позициям при поддержке массированного огня.</p>
+            <p>После первого штурма защитникам крепости стало понятно, что их передовые позиции устроены слишком близко к предпольным укреплениям цитадели. По этой причине противник мог вести относительно прицельный огонь по плацдарму. Чтобы исправить положение, позиции отодвинули от крепости на дистанцию в 8–10 км. Чтобы увеличить дальность ведения огня крепостной артиллерией, из Кронштадта в Осовец доставили две <strong>152-мм дальнобойные скорострельные пушки системы Канэ</strong>.</p>
           </div>
         </div>
         <figure>
-          <img src="images/ykrep.gif" alt="Схема укреплений Сосненской позиции" loading="lazy" />
-          <figcaption>Узлы обороны, проволока, редуты.</figcaption>
+          <img src="images/nem.jpg" alt="Немецкие солдаты перед штурмом" loading="lazy" />
+          <figcaption>Пехота противника готовится к наступлению.</figcaption>
         </figure>
       </div>
+
+      <!-- Штамп №2 -->
+      <aside class="stamp" aria-label="Справка">
+        <small>Справка</small>
+        <p>Gummimaske — ранний немецкий резиновый противогаз (лето 1915). Маска из прорезиненной ткани, каркас, фильтр-контейнер.</p>
+      </aside>
     </section>
 
     <!-- Газовая атака -->
     <section id="gas">
       <div class="grid cols-2">
         <div class="card">
-          <div class="body">
+          <div class="body flow-text">
             <h2>Газовая атака 6&nbsp;августа&nbsp;1915</h2>
-            <p>На рассвете, около 4:00, при благоприятном ветре по фронту Сосненской позиции начали выпускать <strong>хлор</strong> (в ряде источников — с примесью <em>брома</em>).
-              Газ шёл плотной волной, поражая людей и материальную часть; на переднем крае — тяжёлые потери, часть окопов противник занял.</p>
+            <p>Около <strong>03:20</strong> по дневникам начался артобстрел. К <strong>04:00</strong> при благоприятном ветре заработали газобаллонные батареи: хлор, местами с бромом, стёк по низинам на участки Сосненской позиции. Первая линия сильно пострадала; противник занял ряд окопов и ринулся вперёд под прикрытием огневого вала.</p>
             <ul>
-              <li>Отмечают до <em>30 газобаллонных батарей</em> и глубокое проникновение облака;</li>
-              <li>Эффект газа был неравномерен по участкам;</li>
-              <li>Часть резервов в крепости избежала полного поражения.</li>
+              <li>Развёрнуто до <strong>30</strong> газобаллонных батарей (по 10–12 баллонов каждая);</li>
+              <li>Глубина проникновения облака оценивалась до <strong>20&nbsp;км</strong> (поражающее действие — примерно до 12&nbsp;км, до 12&nbsp;м по высоте);</li>
+              <li>В низинах роты были почти выведены из строя; часть резервов уцелела.</li>
             </ul>
+            <div class="aside">Неожиданностью стал и обстрел химическими снарядами: крепостная артиллерия не успела сразу развернуть полноценный ответ.</div>
           </div>
         </div>
         <figure>
-          <img src="images/gas.jpg" alt="Газовая атака — хлорное облако" loading="lazy" />
-          <figcaption>«Зелёное облако» стекало в низины, заполняя траншеи.</figcaption>
+          <img src="images/gas.jpg" alt="Газовая волна на переднем крае" loading="lazy" />
+          <figcaption>«Зелёное облако» заполняло траншеи, ходы сообщения и убежища, оседая в низинах и поражая слизистые, дыхательные пути и глаза.</figcaption>
         </figure>
       </div>
     </section>
 
     <!-- Контратака -->
-    <section id="counter">
-      <div class="grid cols-2">
-        <div class="card">
-          <div class="body">
-            <h2>Контратака, которую назовут «Атакой мёртвецов»</h2>
-            <p>Навстречу наступающим батальонам ландвера поднялись штыковые группы защитников. Ядро — роты <strong>226-го Землянского полка</strong>, прежде всего <strong>13-я рота</strong> подпоручика <strong>Владимира Котлинского</strong>.
-              Контратака вдоль железной дороги заставила противника откатиться с ключевых опорных пунктов.</p>
-            <p>Котлинский был смертельно ранен; завершение удара вели офицеры сапёров (в источниках упоминается <strong>Владислав Стржеминский</strong>). Прорыв ликвидировали, артиллерия накрыла занятые ранее окопы.</p>
-            <div class="aside"><strong>Важно про цифры.</strong> Публицистика даёт образ «60–100 полуживых бойцов против тысяч», тогда как архивные реконструкции чаще говорят о <em>нескольких ротах</em> с нашей стороны и ограниченных штурмовых группах противника.</div>
+    <section id="counter" class="feature">
+      <div class="grid cols-2 counter-grid">
+        <div class="card feature-card">
+          <div class="body flow-text">
+            <h2>Контрудар у Осовца: ход боя</h2>
+
+            <div class="stat-badges">
+              <div class="stat-badge"><span class="label">Газобаллонных батарей</span><span class="value">30</span></div>
+              <div class="stat-badge"><span class="label">Глубина облака</span><span class="value">до 20 км</span></div>
+              <div class="stat-badge"><span class="label">Потери защитников</span><span class="value">≈ 600–650</span></div>
+            </div>
+           <div class="mini-timeline" aria-label="Хронология боя">
+              <div class="moment"><span class="moment-time">03:20</span><p>Начало артобстрела по дневнику 443-го полка.</p></div>
+              <div class="moment"><span class="moment-time">04:00</span><p>Запуск газобаллонных батарей по фронту Сосненской позиции.</p></div>
+              <div class="moment"><span class="moment-time">~04:30</span><p>Ландвер занимает первую/вторую линию; в низинах — тяжёлые потери защитников.</p></div>
+              <div class="moment"><span class="moment-time">~05:00</span><p>Выдвижение рот 8-й, 13-й, 14-й; контратака 13-й роты Котлинского.</p></div>
+              <div class="moment"><span class="moment-time">11:00</span><p>Позиция очищена; штурм сорван.</p></div>
+            </div>
+
+            <!-- Блок награды с PNG медали -->
+            <div class="aside award-box">
+              <div class="award-text">
+              </div>
+            </div>
           </div>
         </div>
-        <figure>
-          <img src="images/counter.jpg" alt="Контратака на Сосненской позиции" loading="lazy" />
-          <figcaption>Ход боя усложнял газ и разрывы связи.</figcaption>
-        </figure>
+
+        <div class="counter-media">
+          <figure class="photo-slot">
+            <img src="images/soldati.jpg" alt="Солдаты Российской армии в окопах" loading="lazy" />
+            <figcaption>Штыковой удар «живых мёртвецов» вдоль железной дороги.</figcaption>
+          </figure>
+        </div>
       </div>
+
+    <section id="myths" class="card">
+      <div class="body flow-text">
+        <h2>Контратака 13-й роты</h2>
+        <ul>
+          <p>Первой в контрнаступление из Заречного форта перешла 13-я рота, в задачу которой входило отбить 1-й участок. Следом за ней выдвинулись 8-я и 14-я роты, которые должны были занять, соответственно, 2-й участок и деревню Сосня. Именно атака 13-й роты вошла в мировую историографию как «атака мертвецов», хотя многое в ней, как это часто бывает с легендами, впоследствии преувеличили. Например, часто можно встретить рассказы о том, что из траншей поднимались солдаты, выдержавшие атаку хлором. Однако это совсем не так – роты, находившиеся в окопах, были полностью уничтожены, а в атаку пошёл резерв, находившийся в стороне от центра газового облака.</p>
+          <figure class="mini-portrait">
+  <img class="photo" src="images/kotlinsky.jpg" alt="Подпоручик Владимир Котлинский">
+  <figcaption>Подпоручик В. Котлинский</figcaption>
+</figure>
+          <p>  Роту повёл вперёд её командир подпоручик Котлинский, который, как и все его солдаты, получил газовое отравление, но остался в строю. Под огнём противника рота преодолела 1 км, отделявший её от Сосненских позиций, после чего рассыпалась цепью и повела наступление вдоль железной дороги. Свидетельство очевидца тех событий напечатала в 1915 году газета «Русское Слово»:
+«Когда участок полотна железной дороги был нами пройден, когда до немцев оставалось 300–400 шагов, Котлинский приказал роте залечь под холмом, а сам вышел под ураганным огнём противника на открытое место и в бинокль осмотрел расположение его сил… Выбранное им место для атаки оказалось удачным» </p>
+<p> В современных описаниях можно встретить рассказы о том, что увидев живых русских солдат, выбегавших из хлорного тумана, немцы пустились наутёк. На самом же деле они открыли шквальный пулемётный и ружейный огонь, в результате которого часть русских солдат погибла. Смертельное ранение получил и подпоручик Котлинский, успевший передать командование подпоручику Стржеминскому. В ротном журнале боевых действий указывалось: «В конце этой лихой атаки подпоручик Котлинский был смертельно ранен и передал командование 13-й ротой подпоручику 2-й Осовецкой саперной роты Стрежеминскому, который завершил и окончил столь славно начатое подпоручиком Котлинским дело» </p>
+<p>Паника среди немцев началась, когда они сошлись со своим противником в рукопашной схватке. Немецкие солдаты, как и их командиры, были полностью уверены, что газы сделают всё дело, и никакого заметного сопротивления они не встретят. Но когда на немцев из уже поредевших клубов газа пошли в атаку люди с кожей, позеленевшей от окиси хлора, они бросились наутёк. На плечах противника русские солдаты ворвались во вторую линию траншей, где им удалось отбить невредимыми противоштурмовые орудия и пулемёты, которые немцы захватили несколькими часами ранее.
+Далее землянцы начали прорываться к хутору, носившему название «дворы Леонова». Здесь между траншеями второй и первой линий 1-го участка Сосненских позиций были натянуты проволочные заграждения, разделявшие немецких и русских солдат. Пройти через них можно было только по соединительному ходу, который простреливался немцами.</p>
+<p>Артиллерия крепости сосредоточила огонь на дворах Леонова, где из-за своей скученности немцы понесли огромные потери. После этого русские солдаты забросали соединительный ход гранатами и ворвались в первую линию траншей. Мало кто из немцев смог вырваться из этой ловушки – большинство навсегда осталось на проволочных заграждениях, узкие проходы в которых не могли пропустить всех «желающих». Те же немногие, кто выжил, после этого долго страдали нервными расстройствами и распространяли легенду об атаке «мертвецов».</p>
+ <div class="aside award-box">
+              <img class="award-img" src="images/medal-george4.png" alt="Орден Святого Георгия IV степени">
+              <div class="award-text">
+                <strong>Высочайшим приказом от 26 сентября 1916 г.</strong> &nbsp;подпоручик Владимир Котлинский посмертно награждён орденом Св.&nbsp;Георгия IV степени.
+              </div>     
+</div>
+    </section>
+
+    <section id="myths" class="card">
+      <div class="body flow-text">
+        <h2>Вторая «атака мертвецов»</h2>
+        <ul>
+          <figure class="mini-portrait">
+  <img class="photo" src="images/Cheglov.png" alt="Подпоручик Владимир Котлинский">
+  <figcaption>Портрет подпоручика <p>В. Чеглокова.</p> Точное фото не обнаружено. Иллюстрация.</figcaption>
+</figure>
+          <p>Между тем, 12-я рота под командованием подпоручика Чеглокова не менее героически удерживала 3-й участок, упорно отбивая атаки врага. Вскоре к ней смогли пробиться солдаты 14-й роты, половину состава которой газы вывели из строя – но даже этого подкрепления хватило, чтобы отбить у противника Сосню. Увидев на её окраине изувеченные трупы своих товарищей, русские солдаты озверели. Их не смог удержать ни численный перевес противника, ни слабость после газового отравления. Офицерам стоило больших трудов заставить своих подчинённых щадить пленных, которых взяли живыми только 14 человек. Остальные немцы были переколоты штыками, погибли на проволочных заграждениях или ретировались. К 11:00 приступ был окончательно отбит.</p>
+          <p>12-й и 14-й ротам также удалось вернуть орудия и пулемёты, потерянные в начале дня. Тем не менее, ситуация на Сосненских позициях сложилась отчаянная – в проволочных заграждениях зияли проходы, траншеи занимали всего-навсего две неполные роты, а половина противоштурмовых вооружений была потеряна. В крепости значительное количество артиллеристов вышло из строя, отравившись газами. Если бы немцы повторили атаку, то она, скорее всего, удалась бы. Но солдаты противника не могли идти вперёд, поскольку были деморализованы потерями от своего же газового оружия, точностью русских артиллеристов и стойкостью солдат гарнизона, которым, казалось, даже газ нипочём.</p>
+<p> Точные потери обеих сторон неизвестны до сих пор и вряд ли станут известны в будущем. В архивных документах удалось обнаружить лишь данные о потерях офицерского состава – один убитый в бою (подпоручик Котлинский) и семь отравленных газами. Немецкая сторона свои документы не нашла или же не пыталась найти, мотивируя это утерей архивов во время Второй мировой войны.</p>    
+    </section>
+    
+      <!-- Штамп №3 -->
+      <aside class="stamp" aria-label="Поэтическая вставка">
+        <small>Radio Tapok</small>
+        <p>Кашляв кровью, сплюнув с губ — каждый знал, что уже труп;</p>
+        <p>Маршируя на врага, — в штыки шли русские войска.</p>
+      </aside>
     </section>
 
     <!-- Итоги -->
     <section id="aftermath">
       <div class="grid cols-2">
         <div class="card">
-          <div class="body">
-            <h2>Итоги боя и эвакуация крепости</h2>
-            <p>Штурм 6&nbsp;августа сорвали. Но оперативная обстановка ухудшалась: падение Ковно и угрозы от Новогеоргиевска делали удержание Осовца бессмысленным.
-              <strong>18&nbsp;августа&nbsp;1915</strong> гарнизон организованно оставил крепость, предварительно приведя в негодность укрепления и имущество.</p>
+          <div class="body flow-text">
+            <h2>Отступление в века</h2>
+            <p>К сожалению, героизм защитников крепости оказался напрасным. Ещё до легендарных событий в Осовце, в мае 1915 года, германо-австрийским войскам удалось прорвать русский фронт в Галиции, и, чтобы избежать окружения, русская армия начала общее отступление из Галиции и Польши. Решение о сдаче Осовецкой крепости уберегло её защитников от второй газовой атаки (её подготовка была в разгаре, когда немцы выяснили, что противника перед ними нет).</p>
+          <p>23 августа в крепости оставались лишь две роты сапёров, инженеры гарнизона и часть артиллеристов. Все укрепления четырёх фортов были заминированы пироксилином, который в изобилии хранился в погребах. Четыре оставленные 150-мм пушки вели огонь, изображая присутствие всей артиллерии, после чего в 19:00 сапёры подожгли здания, а в 20:00 последние защитники Осовца подорвали заряды, заложенные в укреплениях, и отступили.</p>
           </div>
         </div>
         <figure>
-          <img src="images/aftermath.jpg" alt="Подрыв батарей и складов" loading="lazy" />
-          <figcaption>Стандартная практика при оставлении крепости.</figcaption>
+          <img src="images/krepost.jpg" alt="Подрыв укреплений при эвакуации Осовца" loading="lazy" />
+          <figcaption>Крепость Осовец (архивные фото).</figcaption>
         </figure>
       </div>
+
+      <!-- Штамп №4 -->
+      <aside class="stamp" aria-label="Свидетельство">
+        <small>Свидетельство</small>
+        <p>Немецкие штурмовые группы, ожидавшие лёгкого продвижения после газа, были деморализованы видом контратакующих: обожжённые хлором, в бинтах, они казались «воскресшими».</p>
+      </aside>
     </section>
 
     <!-- Участники -->
     <section id="people" class="card">
-      <div class="body">
+      <div class="body flow-text">
         <h2>Подразделения и лица</h2>
         <div class="grid cols-3">
           <div>
             <h3>С нашей стороны</h3>
             <ul>
-              <li>226-й Землянский пехотный полк (8-я, 12-я, 13-я, 14-я роты);</li>
-              <li>225-й Ливенский пехотный полк (роты 12, 15, 16);</li>
-              <li>444-й Дмитровский пехотный полк (2-й и 3-й батальоны);</li>
-              <li>Крепостные сапёры и ополчение.</li>
+              <li><strong>226-й Землянский пехотный полк</strong> (8-я, 12-я, 13-я, 14-я роты);</li>
+              <li>Крепостные сапёры и ополчение;</li>
+              <li>Крепостная артиллерия.</li>
             </ul>
           </div>
           <div>
             <h3>Командиры и герои</h3>
             <ul>
               <li><strong>Подпоручик Владимир Котлинский</strong> — командир 13-й роты; смертельно ранен;</li>
-              <li><strong>Владислав Стржеминский</strong> — офицер-сапёр;</li>
-              <li><strong>Николай Бржозовский</strong> — комендант крепости.</li>
+              <li><strong>Владислав Стржеминский</strong> — подпоручик 2-й Осовецкой сапёрной роты; завершил контрудар;</li>
+              <li><strong>Капитан Потапов</strong> — командир 3-го батальона (донесение о прорыве).</li>
             </ul>
           </div>
           <div>
             <h3>С германской стороны</h3>
             <ul>
-              <li>Части <em>11-й ландверной дивизии</em>;</li>
-              <li>Инженерные подразделения (газобаллонные батареи);</li>
-              <li>Район ответственности группы Хинденбурга.</li>
+              <li>Части <strong>11-й ландверной дивизии</strong>;</li>
+              <li>Инженерные подразделения с газобаллонными батареями;</li>
+              <li>Наступление под прикрытием огневого вала.</li>
             </ul>
           </div>
         </div>
@@ -450,14 +655,14 @@
 
     <!-- Мифы и факты -->
     <section id="myths" class="card">
-      <div class="body">
-        <h2>Мифы и факты: почему разнятся оценки</h2>
+      <div class="body flow-text">
+        <h2>Тактика, мораль и последствия боя</h2>
         <ul>
-          <li><strong>Численность защитников.</strong> В публицистике — «несколько десятков», в документах — чаще <em>несколько рот</em>.</li>
-          <li><strong>Численность атакующих.</strong> Нередко действовали <em>усиленные патрульные группы</em>, а не вся масса дивизии.</li>
-          <li><strong>Газ.</strong> Преимущественно <em>хлор</em> из баллонов; в ряде источников — упоминание примеси <em>брома</em> и применения газовых снарядов.</li>
+          <li><strong>Тактическое положение.</strong> Ослабленные силы оборонялись в форте Оссовец, который не имел полноценной защиты после газовой атаки, но сам рельеф и укрепления сыграли ключевую роль в контратаке..</li>
+          <li><strong>Моральный фактор.</strong> Психологическое воздействие образа «мертвецов» стало решающим — немцы, ожидавшие лёгкой победы после применения газа, столкнулись с живыми, но изуродованными ядовитыми веществами бойцами.</li>
+          <li><strong>Потери сторон.</strong> Несмотря на успех обороняющихся, обе стороны понесли тяжёлые потери: защитники — от газа и обстрелов, атакующие — от внезапной контратаки и паники.</li>
         </ul>
-        <div class="aside">Вывод: <em>контратака сорвала штурм</em>, но детали зависят от источника — мы приводим несколько перспектив.</div>
+        <div class="aside">Событие стало символом несгибаемого духа нашей армии Первой мировой войны и часто сравнивается с другими примерами «стойкости вопреки смерти».</div>
       </div>
     </section>
 
@@ -465,58 +670,78 @@
     <section id="memory">
       <div class="grid cols-2">
         <div class="card">
-          <div class="body">
+          <div class="body flow-text">
             <h2>Память и культура</h2>
             <ul>
-              <li>Памятные знаки в России и Польше; реконструкции.</li>
-              <li>Песни: «Атака мёртвецов» (Ария, 2014), «The Attack of the Dead Men» (Sabaton, 2019).</li>
-              <li>К/м фильм <em>Attack of the Dead Men: Osowiec</em> (Wargaming, 2018).</li>
+              <li>6 августа 2015 года в Пскове открыт памятник землякам-солдатам Первой мировой войны</li>
+              <li>6 августа 2015 года в Землянске (Воронежская область) был установлен памятный знак 226-му пехотному Землянскому полку</li>
+              <li>Песня «Атака мёртвецов» — Ария (2014).</li>
+              <li>Песня «The Attack of the Dead Men» — Sabaton (2019).</li>
+              <li>К/м документальный фильм «Атака мёртвецов: Осовец» (Wargaming, 2018).</li>
+              <li>Научно-популярные публикации в России и Польше; издание С. А. Хмелькова «Борьба за Осовец» (1939).</li>
+              <li>К/м исторический фильм "Непобеждённый гарнизон" 2015 г.</li>
+              <li>Документальный фильм "Атака мертвецов" 2015г.</li>
+              <li>В снятом телеканалом «Мир» документальном фильме «Нельзя забыть» в качестве эпизода присутствует оборона крепости Осовец, включая «атаку мертвецов»</li>
+              <li>Clockwork Times (CWT) — «Атака мертвецов» (2025).</li>
+              <li>Radio Tapok — кавер «Атака мертвецов» на песню Sabaton — The Attack of the Dead Men (18 июля 2019 года).</li>
+              <li>Арктида — «Атака Русских Мертвецов» (альбом «Долг и Право», 2017).</li>
             </ul>
           </div>
         </div>
         <figure>
-          <img src="images/pamat.jpg" alt="Современные реконструкции и мемориалы" loading="lazy" />
-          <figcaption>Интерес к событиям Осовца поддерживается мемориалами и реконструкциями.</figcaption>
+          <img src="images/pamatnik.jpg" alt="Памятник солдату Первой мировой в Пскове" loading="lazy" />
+          <figcaption>Памятник солдату первой мировой войны в г. Псков</figcaption>
         </figure>
       </div>
     </section>
 
     <!-- Источники -->
     <section id="sources" class="card">
-      <div class="body">
-        <h2>Источники и литература (для быстрой проверки)</h2>
+      <div class="body flow-text">
+        <h2>Источники и литература</h2>
         <ul class="footnotes">
-          <li>Статья «Атака мёртвецов» (рус.) — сопоставление русских и немецких документов.</li>
-          <li>«Osowiec Fortress» / «Attack of the Dead Men» (англ.) — обзор по англоязычным источникам.</li>
-          <li>С.А. Хмельков, <em>Борьба за Осовец</em> (1939).</li>
-          <li>М.С. Свечников, В.В. Буняковский, <em>Оборона крепости Осовец</em>.</li>
-          <li>А.А. Черкасов и др., <em>Dead Men Attack (Osovets, 1915): Archive Sources Approach</em>.</li>
-          <li>P. Buttar, <em>Germany Ascendant: The Eastern Front 1915</em>.</li>
+          <li>Дневниковые записи частей гарнизона (в т.ч. 226-го пехотного полка).</li>
+          <li>С. А. Хмельков, <em>Борьба за Осовец</em> (1939).</li>
+          <li>Обзоры по обороне крепости и химическим атакам 1915&nbsp;г.</li>
+          <li>Статья «Атака мёртвецов» в Википедии.</li>
+          <li><em>История Беларуси. XX век</em>. Учебник для 8 класса школ Республики Беларусь (раздел о Первой мировой войне).</li>
+          <li>Статья на форуме "Усадьба Урсы". Автор Max94</li>
+          <li>На фоне страницы — док. фильм <strong>«Атака мёртвецов: Осовец»</strong> (Wargaming, 2018).</li>
         </ul>
-        <p class="muted">Примечание: где оценки расходятся — отмечено явно.</p>
+      </div>
+    </section>
+
+    <!-- ВИДЕО-БЛОК -->
+    <section id="videos" class="card">
+      <div class="body">
+        <h2 style="margin-bottom:.6em">Видеоматериалы на русском языке</h2>
+        <div class="videos-grid" id="videosGrid" aria-label="Видео о крепости и событиях">
+          <a class="video-link video-card" data-url="https://www.youtube.com/watch?v=U518G8fUk6o" target="_blank" rel="noopener">
+            <div class="video-thumb"><img alt="Превью видео 1" /><span class="play" aria-hidden="true"></span></div>
+            <div class="video-caption">«Атака мёртвецов: Осовец» — короткометражный фильм</div>
+          </a>
+          <a class="video-link video-card" data-url="https://www.youtube.com/watch?v=pj0hHmMR_yQ" target="_blank" rel="noopener">
+            <div class="video-thumb"><img alt="Превью видео 2" /><span class="play" aria-hidden="true"></span></div>
+            <div class="video-caption"> Атака мертвецов / Оборона крепости Осовец / Уроки истории / МИНАЕВ </div>
+          </a>
+          <a class="video-link video-card" data-url="https://www.youtube.com/watch?v=SVITMG3cfv0" target="_blank" rel="noopener">
+            <div class="video-thumb"><img alt="Превью видео 3" /><span class="play" aria-hidden="true"></span></div>
+            <div class="video-caption">«Осовец. Крепость духа» — документальный фильм</div>
+          </a>
+        </div>
       </div>
     </section>
 
     <p style="text-align:center; opacity:.65; font-size:13px; margin:32px 0 80px">
-        Проект о Первой мировой на землях Беларуси • Создано с любовью и болью  • © Урицкая средняя школа,2025 г.
+      Проект о Первой мировой на землях Беларуси • Создано с уважением к памяти • © Урицкая средняя школа, 2025 г.
     </p>
   </main>
 
+  <button type="button" class="back-fab" aria-label="Вернуться на прошлую страницу" title="Назад" onclick="history.back()">
+    <span aria-hidden="true">←</span>
+  </button>
+
   <a href="#top" class="to-top" id="toTop" title="Наверх">↑</a>
-
-  <!-- ЛАЙТБОКС -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр изображения" hidden>
-    <button class="lb-close" id="lbClose" aria-label="Закрыть просмотр">✕</button>
-    <button class="lb-prev" id="lbPrev" aria-label="Предыдущее изображение">‹</button>
-    <button class="lb-next" id="lbNext" aria-label="Следующее изображение">›</button>
-
-    <div class="lb-frame" id="lbFrame" tabindex="-1">
-      <img class="lb-img" id="lbImg" src="" alt="">
-      <div class="lb-caption" id="lbCaption"></div>
-    </div>
-
-    <div class="lb-hint" aria-hidden="true">Esc — закрыть · ⟵ ⟶ — листать</div>
-  </div>
 
   <script>
     /* ========= ПРОГРЕСС/КНОПКА ВВЕРХ ========= */
@@ -563,116 +788,32 @@
       }
     });
 
-    /* ========= ЛАЙТБОКС ========= */
+    /* ========= ВИДЕО-ПРЕВЬЮ (YouTube) ========= */
     (function(){
-      const lb = document.getElementById('lightbox');
-      const lbImg = document.getElementById('lbImg');
-      const lbCaption = document.getElementById('lbCaption');
-      const lbFrame = document.getElementById('lbFrame');
-      const btnPrev = document.getElementById('lbPrev');
-      const btnNext = document.getElementById('lbNext');
-      const btnClose = document.getElementById('lbClose');
-
-      // Собираем все изображения из <figure>
-      const figures = [...document.querySelectorAll('figure')];
-      const items = figures.map((fig, idx) => {
-        const img = fig.querySelector('img');
-        const cap = fig.querySelector('figcaption');
-        // добавим доступность: по Enter/Space тоже открывается
-        fig.setAttribute('tabindex', '0');
-        fig.setAttribute('role', 'button');
-        fig.setAttribute('aria-label', 'Открыть изображение в полноэкранном режиме');
-        return {
-          index: idx,
-          src: img?.getAttribute('src') || '',
-          alt: img?.getAttribute('alt') || '',
-          caption: (cap?.textContent || img?.getAttribute('alt') || '').trim()
-        };
-      }).filter(x => x.src);
-
-      let current = -1;
-      let lastFocus = null;
-
-      function openLightbox(i){
-        if(i < 0 || i >= items.length) return;
-        current = i;
-
-        const it = items[current];
-        lbImg.src = it.src;
-        lbImg.alt = it.alt || '';
-        lbCaption.textContent = it.caption || '';
-
-        lb.removeAttribute('hidden');
-        lb.classList.add('open');
-        document.body.classList.add('lightbox-open');
-
-        lastFocus = document.activeElement;
-        lbFrame.focus();
-
-        // управление видимостью стрелок
-        btnPrev.style.opacity = current > 0 ? '1' : '.35';
-        btnNext.style.opacity = current < items.length - 1 ? '1' : '.35';
-      }
-
-      function closeLightbox(){
-        lb.classList.remove('open');
-        document.body.classList.remove('lightbox-open');
-        setTimeout(() => {
-          lb.setAttribute('hidden','');
-          lbImg.src = '';
-        }, 180);
-        if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
-      }
-
-      function showPrev(){ if(current > 0) openLightbox(current - 1) }
-      function showNext(){ if(current < items.length - 1) openLightbox(current + 1) }
-
-      // Клики по figure (и клавиатура)
-      figures.forEach((fig, i) => {
-        fig.addEventListener('click', e => {
-          const img = fig.querySelector('img');
-          if(!img) return;
-          e.preventDefault();
-          openLightbox(i);
-        });
-        fig.addEventListener('keydown', e => {
-          if(e.key === 'Enter' || e.key === ' '){
-            e.preventDefault(); openLightbox(i);
+      function getYouTubeId(url){
+        try{
+          const u = new URL(url);
+          if(u.hostname === 'youtu.be') return u.pathname.slice(1);
+          if(u.hostname.includes('youtube.com')){
+            if(u.searchParams.get('v')) return u.searchParams.get('v');
+            const parts = u.pathname.split('/').filter(Boolean);
+            const idx = parts.findIndex(p => p === 'embed' || p === 'shorts');
+            if(idx > -1 && parts[idx+1]) return parts[idx+1];
           }
-        });
-      });
-
-      // Кнопки
-      btnClose.addEventListener('click', closeLightbox);
-      btnPrev.addEventListener('click', showPrev);
-      btnNext.addEventListener('click', showNext);
-
-      // Клавиатура
-      document.addEventListener('keydown', e => {
-        if(lb.hasAttribute('hidden')) return;
-        if(e.key === 'Escape') closeLightbox();
-        else if(e.key === 'ArrowLeft') showPrev();
-        else if(e.key === 'ArrowRight') showNext();
-      });
-
-      // Закрытие по клику вне кадра
-      lb.addEventListener('click', e => {
-        const inside = e.target.closest('.lb-frame');
-        const isBtn = e.target.closest('button');
-        if(!inside && !isBtn) closeLightbox();
-      });
-
-      // Прелоад соседних фото для плавной навигации
-      function preload(src){
-        const img = new Image(); img.src = src;
+        }catch(e){ }
+        return null;
       }
-      const observerImg = new MutationObserver(() => {
-        const idx = current;
-        if(idx > 0) preload(items[idx-1].src);
-        if(idx < items.length - 1) preload(items[idx+1].src);
+      const cards = document.querySelectorAll('.video-link.video-card');
+      cards.forEach(card => {
+        const url = card.getAttribute('data-url') || '';
+        const id = getYouTubeId(url);
+        const img = card.querySelector('img');
+        if(id && img){ img.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`; }
+        else{ img.src = 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&w=1200&q=80'; }
+        if(url && card.tagName === 'A'){ card.setAttribute('href', url); }
       });
-      observerImg.observe(lbImg, { attributes: true, attributeFilter: ['src'] });
     })();
   </script>
 </body>
 </html>
+
