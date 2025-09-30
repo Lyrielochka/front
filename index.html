@@ -73,12 +73,21 @@
     </button>
   </header>
 
+<section id="intro" class="wrap reveal">
+    <article class="intro">
+      <p>Тема Первой мировой войны на территории Беларуси остаётся крайне мало изученной и недостаточно представленной в общественном дискурсе. Несмотря на её масштабные последствия, она часто оказывается в тени более известных событий XX века. </p>
+      <p>Мы стремимся восполнить этот пробел, показать значимость белорусского фронта и подчеркнуть, что в годы Великой  войны здесь происходили не менее героические и трагические эпизоды, заслуживающие памяти и уважения.</p>
+      <p>Наш проект направлен на то, чтобы показать, что происходило здесь более ста лет назад, и помочь понять, почему Первая мировая остаётся актуальной темой для осмысления и изучения в современном обществе.</p>
+    <p> Сайт создан с нуля, с использованием уникального программного кода. Он включает динамическую анимацию, плавные переходы между разделами, интерактивные карты боевых действий, архивные фотографии и биографии участников,отдельной статии о крепости Осовец и много другого. <p>Пользователь может исследовать материалы через визуальные блоки, а также погрузиться в исторический контекст благодаря адаптивному дизайну и интуитивной навигации. Все элементы сайта — от структуры до визуального оформления — разработаны индивидуально, без использования шаблонов.</p>
+    </article>
+  </section>
+
   <!-- ВСТУПИТЕЛЬНЫЙ ТЕКСТ (после главной, перед потерями) -->
   <section id="intro" class="wrap reveal">
     <article class="intro">
       <p>Первая мировая война стала одной из самых масштабных трагедий XX века. Для народов бывшей Российской империи она обернулась колоссальными потерями — на фронтах и от последствий военных действий погибло около <strong>2&nbsp;миллионов человек</strong>. Среди них десятки и сотни тысяч были уроженцами белорусских земель, которые оказались в самом центре ожесточённых боёв.</p>
       <p>Память об этом периоде сегодня особенно важна: война не только изменила судьбы миллионов людей, но и предопределила дальнейшее развитие истории всего региона. Белорусские земли стали ареной тяжёлых сражений, разрушений и массовых жертв, а потому сохранение исторического наследия и напоминание о цене той войны — наш долг перед прошлым и будущим.</p>
-      <p>Наш проект направлен на то, чтобы показать, что происходило здесь более ста лет назад, и помочь понять, почему Первая мировая остаётся актуальной темой для осмысления и изучения в современном обществе.</p>
+      <p>Наш проект — это попытка вернуть в поле зрения подвиг людей, оказавшихся в эпицентре глобального конфликта.</p>
     </article>
   </section>
 
@@ -86,15 +95,15 @@
   <section id="stats" class="wrap">
     <div class="stats">
       <article class="stat reveal" aria-label="Количество участников из белорусских губерний">
-        <h3>Белорусов, принявших участие</h3>
-        <div class="counter" data-target="1300000">0</div>
-        <div class="sub">на службе в армии Российской империи (оценка, уточняется)</div>
+        <h3>Военные потери</h3>
+        <div class="counter" data-target="70000">0</div>
+        <div class="sub">По данным Национальной библиотеки Республики Беларусь</div>
       </article>
 
       <article class="stat stele reveal" aria-label="Погибшие уроженцы белорусских земель">
-        <h3>Погибшие</h3>
-        <div class="counter" data-target="300000">0</div>
-        <div class="sub">военные потери среди уроженцев белорусских губерний (оценка)</div>
+        <h3>Гражданские потери</h3>
+        <div class="counter" data-target="60000">0</div>
+        <div class="sub">По данным Национальной библиотеки Республики Беларусь</div>
         <div class="candles" aria-hidden="true">
           <span class="candle"></span><span class="candle"></span><span class="candle"></span>
         </div>
@@ -104,12 +113,28 @@
 
   <!-- КАРТА (без улучшений) -->
   <section id="map" class="wrap reveal">
-    <div class="map" role="region" aria-label="Интерактивная карта (скоро)">
-      <h3 style="margin:0 0 8px;">Карта боёв и укрепрайонов</h3>
-      <p class="sub">Здесь позже встраиваем приложение с интерактивной картой (Нарочь, Сморгонь, Барановичи, Осовец и др.).</p>
-      <div class="slot"><strong>Плейсхолдер</strong></div>
+    <div class="map interactive-map" data-map-url="map-data.json" role="region" aria-label="Интерактивная карта боёв за крепость Осовец">
+      <div class="map__text">
+        <h3>Карта боёв и укреплений</h3>
+        <p class="sub">Интерактивная схема ключевых точек обороны, этапов штурмов и направлений атак 1914&#8211;1917 годов.</p>
+      </div>
+      <div class="map__toolbar" data-map-toolbar>
+        <span class="map__label">Годы:</span>
+        <button class="map__year is-active" type="button" data-year="">Все</button>
+        <button class="map__year" type="button" data-year="1914">1914</button>
+        <button class="map__year" type="button" data-year="1915">1915</button>
+        <button class="map__year" type="button" data-year="1916">1916</button>
+        <button class="map__year" type="button" data-year="1917">1917</button>
+      </div>
+      <div class="map__stage" data-map-stage>
+        <img class="map__base" data-map-base src="belarus.webp" alt="Схема оборонительных укреплений крепости Осовец" loading="lazy" decoding="async">
+        <canvas class="map__canvas" data-map-canvas width="960" height="857" aria-label="Схема боевых действий"></canvas>
+        <div class="map__tooltip" data-map-infobox role="status" aria-live="polite"></div>
+      </div>
+      <p class="map__hint" data-map-hint>Данные загружаются из защищённого файла карты.</p>
     </div>
   </section>
+
 
   <!-- ХРОНОЛОГИЯ FULL-BLEED -->
   <section id="timeline" class="timeline-bleed">
@@ -132,70 +157,70 @@
     <div class="timeline" role="region" aria-label="Хронологическая лента">
       <div class="ticks" id="tlTrack">
         <article class="tick reveal" id="tl-1914-08-01">
-          <a class="permalink" href="#tl-1914-08-01" aria-label="Скопировать ссылку на событие">#</a>
+          <a class="permalink" href="#tl-1914-08-01" aria-label="Скопировать ссылку на событие">→</a>
           <div class="when">1 авг 1914</div>
           <div><strong>Германия объявляет войну России</strong><p>Начало участия Российской империи в мировой войне.</p></div>
-          <figure class="media"><img src="images/1.png" alt="Архивное фото фронта"></figure>
+          <figure class="media"><img src="images/1.jpg" alt="Архивное фото фронта"></figure>
         </article>
 
         <article class="tick reveal" id="tl-1915-08-summer">
-          <a class="permalink" href="#tl-1915-08-summer" aria-label="Скопировать ссылку на событие">#</a>
+          <a class="permalink" href="#tl-1915-08-summer" aria-label="Скопировать ссылку на событие">→</a>
           <div class="when">авг–сент 1915</div>
-          <div><strong>Летнее наступление Германии</strong><p>Прорыв на Северо-Западном фронте, отход русских войск из Гродненской губернии.</p></div>
+          <div><strong>Летнее наступление Германии</strong><p>Прорыв на Северо-Западном фронте, отход русских войск.</p></div>
           <figure class="media"><img src="images/2.png" alt="Позиции и проволока"></figure>
         </article>
 
         <article class="tick reveal" id="tl-1915-08-osovets">
-          <a class="permalink" href="#tl-1915-08-osovets" aria-label="Скопировать ссылку на событие">#</a>
+          <a class="permalink" href="#tl-1915-08-osovets" aria-label="Скопировать ссылку на событие">→</a>
           <div class="when">авг 1915</div>
           <div><strong>Осовец: «Атака мёртвецов»</strong><p>Химатака хлором; контратака гарнизона крепости Осовец.</p></div>
           <figure class="media"><img src="images/3.jpg" alt="Осовец"></figure>
         </article>
 
         <article class="tick reveal" id="tl-1915-09-sventiany">
-          <a class="permalink" href="#tl-1915-09-sventiany" aria-label="Скопировать ссылку на событие">#</a>
+          <a class="permalink" href="#tl-1915-09-sventiany" aria-label="Скопировать ссылку на событие">→</a>
           <div class="when">сент 1915</div>
           <div><strong>Свентянский прорыв</strong><p>Развитие наступления к Вильне, бои в районе Сморгони.</p></div>
-          <figure class="media"><img src="images/4.png" alt="Сморгонь — укрепления"></figure>
+          <figure class="media"><img src="images/4.jpg" alt="Сморгонь — укрепления"></figure>
         </article>
 
         <article class="tick reveal" id="tl-1916-03-naroch">
-          <a class="permalink" href="#tl-1916-03-naroch" aria-label="Скопировать ссылку на событие">#</a>
+          <a class="permalink" href="#tl-1916-03-naroch" aria-label="Скопировать ссылку на событие">→</a>
           <div class="when">март 1916</div>
           <div><strong>Нарочская операция</strong><p>Крупное наступление русской армии у озера Нарочь.</p></div>
-          <figure class="media"><img src="images/5.png" alt="Нарочь — болота и лёд"></figure>
+          <figure class="media"><img src="images/5.jpg" alt="Нарочь — болота и лёд"></figure>
         </article>
 
         <article class="tick reveal" id="tl-1916-06-baranovichi">
-          <a class="permalink" href="#tl-1916-06-baranovichi" aria-label="Скопировать ссылку на событие">#</a>
+          <a class="permalink" href="#tl-1916-06-baranovichi" aria-label="Скопировать ссылку на событие">→</a>
           <div class="when">июнь–июль 1916</div>
           <div><strong>Барановичские бои</strong><p>Серия атак на позиции у Барановичей; фронт стабилизируется.</p></div>
           <figure class="media"><img src="images/6.png" alt="Барановичи — позиции"></figure>
         </article>
 
         <article class="tick reveal" id="tl-1915-1917-smorgon">
-          <a class="permalink" href="#tl-1915-1917-smorgon" aria-label="Скопировать ссылку на событие">#</a>
+          <a class="permalink" href="#tl-1915-1917-smorgon" aria-label="Скопировать ссылку на событие">→</a>
           <div class="when">1915–1917</div>
           <div><strong>Сморгонь</strong><p>Долгая позиционная «война бетонных коробок» и артдуэли.</p></div>
-          <figure class="media"><img src="images/7.png" alt="ДОТы и окопы"></figure>
+          <figure class="media"><img src="images/7.jpg" alt="ДОТы и окопы"></figure>
         </article>
 
         <article class="tick reveal" id="tl-1917-03-feb-rev">
-          <a class="permalink" href="#tl-1917-03-feb-rev" aria-label="Скопировать ссылку на событие">#</a>
+          <a class="permalink" href="#tl-1917-03-feb-rev" aria-label="Скопировать ссылку на событие">→</a>
           <div class="when">март 1917</div>
           <div><strong>Февральская революция</strong><p>Дезорганизация управления фронтом, падение дисциплины.</p></div>
           <figure class="media"><img src="images/8.jpg" alt="Фронтовой быт"></figure>
         </article>
 
         <article class="tick reveal" id="tl-1917-12-armistice">
-          <a class="permalink" href="#tl-1917-12-armistice" aria-label="Скопировать ссылку на событие">#</a>
+          <a class="permalink" href="#tl-1917-12-armistice" aria-label="Скопировать ссылку на событие">→</a>
           <div class="when">дек 1917</div>
           <div><strong>Перемирие</strong><p>Прекращение активных боевых действий; переговоры в Брест-Литовске.</p></div>
-          <figure class="media"><img src="images/9.png" alt="Переговоры"></figure>
+          <figure class="media"><img src="images/9.jpg" alt="Переговоры"></figure>
         </article>
 
         <article class="tick reveal" id="tl-1918-03-03-brest">
-          <a class="permalink" href="#tl-1918-03-03-brest" aria-label="Скопировать ссылку на событие">#</a>
+          <a class="permalink" href="#tl-1918-03-03-brest" aria-label="Скопировать ссылку на событие">→ </a>
           <div class="when">3 март 1918</div>
           <div><strong>Брест-Литовский мир</strong><p>Мирный договор; фронт на белорусских землях прекращает существование.</p></div>
           <figure class="media"><img src="images/10.jpg" alt="Брест-Литовск"></figure>
@@ -209,8 +234,8 @@
   <section id="archive" class="wrap reveal">
     <div class="archive">
       <header class="archive-head">
-        <h2>Архив учебников</h2>
-        <p>Мы собираем полезные книги и пособия о Первой мировой войне. Скачайте материалы и изучите тему глубже.</p>
+        <h2>Архив </h2>
+        <p>Мы собираем полезные книги и пособия о Первой мировой войне. <p>Скачайте материалы и изучите тему глубже. <p>В дальнейшем список будет пополняться.</p></p></p>
       </header>
       <div class="archive-grid" role="list">
         <article class="archive-item" role="article">
@@ -218,9 +243,12 @@
             <img src="images/archive/1.png" alt="Обложка учебника 1" loading="lazy">
           </div>
           <div class="archive-body">
-            <h3>История Беларуси. Том 1</h3>
+            <h3>История Беларуси</h3>
             <p>Учебник для старших классов: причины, ход и последствия войны для белорусских территорий.</p>
-            <a class="download" href="1.pdf" download>Скачать PDF</a>
+            <div class="archive-actions">
+        <a class="archive-btn download" href="1.pdf" download>Скачать</a>
+        <a class="archive-btn read" href="1.pdf" target="_blank" rel="noopener">Читать</a>
+      </div>
           </div>
         </article>
         <article class="archive-item" role="article">
@@ -230,7 +258,10 @@
           <div class="archive-body">
             <h3>Документы и хроника</h3>
             <p>Сборник источников: приказы, письма и дневники участников боёв на Восточном фронте.</p>
-            <a class="download" href="2.pdf" download>Скачать PDF</a>
+            <div class="archive-actions">
+        <a class="archive-btn download" href="2.pdf" download>Скачать</a>
+        <a class="archive-btn read" href="2.pdf" target="_blank" rel="noopener">Читать</a>
+      </div>
           </div>
         </article>
         <article class="archive-item" role="article">
@@ -240,7 +271,10 @@
           <div class="archive-body">
             <h3>Методическое пособие</h3>
             <p>План уроков, задания для учеников и рекомендации по проведению занятий.</p>
-            <a class="download" href="3.pdf" download>Скачать PDF</a>
+            <div class="archive-actions">
+        <a class="archive-btn download" href="3.pdf" download>Скачать</a>
+        <a class="archive-btn read" href="3.pdf" target="_blank" rel="noopener">Читать</a>
+      </div>
           </div>
         </article>
       </div>
@@ -284,9 +318,9 @@
   <section id="osovets" class="wrap">
     <article class="osovets reveal">
       <h3>Крепость Осовец</h3>
-      <p class="sub">Фортификационный узел рубежа по Бебже и Нареву (ныне — Подляское воеводство). В августе 1915 г. гарнизон провёл контратаку после хлорной атаки — эпизод, известный как «Атака мёртвецов».</p>
+      <p class="sub">Фортификационный узел рубежа по Бебже и Нареву (ныне — Подляское воеводство). <p>В августе 1915 г. гарнизон провёл контратаку после хлорной атаки — эпизод, известный как «Атака мёртвецов».</p>
       <div class="gasline" aria-hidden="true"></div>
-      <p style="margin-top:12px"><a href="ocovec/osovec.html">Отдельная статья</a>.</p>
+      <p class="osovets__link" style="margin-top:12px"><a href="ocovec/osovec.html"><strong>Читайте в отдельной статье</strong></a></p>
     </article>
   </section>
 
@@ -306,35 +340,35 @@
       <article class="card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="heroModal" data-id="h2">
         <img class="avatar" src="images/heroes/kotlinskij_3.jpg" alt="Портрет героя 2">
         <div class="hero-name">Владимир Карпович Котлинский</div>
-        <div class="hero-meta">уроженец Псковской губернии • подпоручик, топограф</div>
+        <div class="hero-meta">уроженец Псковской губернии • подпоручик</div>
         <p class="hero-desc">24 июля 1915 г. возглавил «Атаку мертвецов» и был смертельно ранен.</p>
       </article>
 
       <article class="card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="heroModal" data-id="h3">
         <img class="avatar" src="images/heroes/gurko.jpg" alt="Портрет героя 3">
         <div class="hero-name">Василий Иосифович Гурко</div>
-        <div class="hero-meta">уроженец Могилёвской губ. • генерал от кавалерии</div>
+        <div class="hero-meta">уроженец Могилёвской губернии • генерал от кавалерии</div>
         <p class="hero-desc">В боях подчинённые ему войска нанесли поражение двум корпусам неприятеля.Взяли до 13 тыс. пленных.</p>
       </article>
 
       <article class="card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="heroModal" data-id="h4">
         <img class="avatar" src="images/heroes/Kaygorodov.jpg" alt="Портрет героя 4">
         <div class="hero-name">Михаил Никифорович Кайгородов</div>
-        <div class="hero-meta">уроженец Витебской губ. • Генерал от инфантерии</div>
+        <div class="hero-meta">уроженец Витебской губернии • Генерал от инфантерии</div>
         <p class="hero-desc">комендант Гродненской крепости.</p>
       </article>
 
       <article class="card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="heroModal" data-id="h5">
         <img class="avatar" src="images/heroes/Лечицкий.jpg" alt="Портрет героя 5">
         <div class="hero-name">Платон Алексеевич Лечицкий</div>
-        <div class="hero-meta">уроженец Гродненской губ. • генерал от инфантерии</div>
+        <div class="hero-meta">уроженец Гродненской губернии • генерал от инфантерии</div>
         <p class="hero-desc">Командовал 9-й армией в 1914–1916 гг.</p>
       </article>
 
       <article class="card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="heroModal" data-id="h6">
         <img class="avatar" src="images/heroes/Ragoza.jpg" alt="Портрет героя 6">
         <div class="hero-name">Александр Францевич Рагоза</div>
-        <div class="hero-meta">уроженец Витебской губ. • Генерал от инфантерии</div>
+        <div class="hero-meta">уроженец Витебской губернии • Генерал от инфантерии</div>
         <p class="hero-desc">Командовал 25-м армейским корпусом и затем 4-й армией на Западном фронте.&nbsp;</p>
       </article>
     </div>
@@ -437,5 +471,7 @@
 <script type="module" src="js/main.module.js"></script>
 </body>
 </html>
+
+
 
 

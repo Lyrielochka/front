@@ -12,6 +12,7 @@ import { initGlossary } from './glossary.js';
 import glossaryFallback from './fallback/glossary.js';
 import heroesFallback from './fallback/heroes.js';
 import { initParticles } from './particles.js';
+import { initMap } from './map.js';
 
 async function run(){
   document.documentElement.classList.add('js');
@@ -25,6 +26,7 @@ async function run(){
     initTyping();
     initTicker();
     initParticles();
+    initMap();
     initGlossary({ url: 'data/glossary.json', fallbackData: glossaryFallback });
     initHeroes({ url: 'data/heroes.json', fallbackData: heroesFallback });
   }catch(err){
