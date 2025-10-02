@@ -11,10 +11,32 @@ export function initMap(options = {}){
   const tooltip = stage?.querySelector('[data-map-infobox]');
   const toolbar = container?.querySelector('[data-map-toolbar]');
   const hint = container?.querySelector('[data-map-hint]');
+  const legend = stage?.querySelector('[data-map-legend]') || container?.querySelector('[data-map-legend]');
+  const legendToggle = legend?.querySelector('[data-map-legend-toggle]');
+  const legendPanel = legend?.querySelector('[data-map-legend-panel]');
+  const legendList = legend?.querySelector('[data-map-legend-list]');
+  const legendTitleEl = legend?.querySelector('[data-map-legend-title]');
 
   if (!container || !stage || !canvas || !tooltip){
     console.warn('[map] markup is incomplete');
     return;
+  }
+
+  if (legendToggle && legendPanel){
+    if (!legendPanel.id){
+      legendPanel.id = `map-legend-${Math.random().toString(36).slice(2, 10)}`;
+    }
+    legendToggle.setAttribute('aria-controls', legendPanel.id);
+    legendToggle.setAttribute('aria-expanded', 'false');
+    legendPanel.addEventListener('keydown', event => {
+      if (event.key === 'Escape'){
+        event.stopPropagation();
+        closeLegend();
+        if (typeof legendToggle.focus === 'function'){
+          legendToggle.focus();
+        }
+      }
+    });
   }
 
   const ctx = canvas.getContext('2d');
@@ -26,6 +48,8 @@ export function initMap(options = {}){
   const activeClass = options.yearActiveClass || 'is-active';
   const yearButtons = toolbar ? Array.from(toolbar.querySelectorAll('[data-year]')) : [];
   const defaultHint = hint ? hint.textContent.trim() : '';
+  const defaultLegendTitle = legendTitleEl ? legendTitleEl.textContent.trim() : 'Легенда';
+  let legendExpanded = false;
 
   function parseYear(value){
     if (value === null || value === undefined || value === '') return null;
@@ -59,6 +83,152 @@ export function initMap(options = {}){
     shapes.lines.forEach(line => { if (yearVisible(line.year)) drawLine(line); });
     shapes.arrows.forEach(arrow => { if (yearVisible(arrow.year)) drawArrow(arrow); });
     shapes.points.forEach(point => { if (yearVisible(point.year)) drawPoint(point); });
+  }
+
+  function setLegendExpanded(state){
+    legendExpanded = Boolean(state);
+    if (!legend || !legendToggle || !legendPanel) return;
+    legendToggle.setAttribute('aria-expanded', legendExpanded ? 'true' : 'false');
+    legendPanel.hidden = !legendExpanded;
+    legend.classList.toggle('is-open', legendExpanded);
+  }
+
+  function toggleLegend(){
+    setLegendExpanded(!legendExpanded);
+  }
+
+  function closeLegend(){
+    setLegendExpanded(false);
+  }
+
+  function normalizeLegendItem(item){
+    if (item === null || item === undefined) return null;
+    if (typeof item === 'number' || typeof item === 'string'){
+      const value = String(item).trim();
+      const year = parseYear(item);
+      return {
+        label: value || (year !== null ? String(year) : '-'),
+        color: year !== null ? pickYearColor(year) : null,
+        icon: null,
+        description: ''
+      };
+    }
+    if (typeof item !== 'object') return null;
+    const year = parseYear(item.year ?? item.value ?? item.id ?? item.key);
+    const labelSource = item.label ?? item.title ?? item.text ?? (year !== null ? String(year) : '');
+    const label = String(labelSource || '').trim() || '-';
+    const colorRaw = item.color ?? item.colour ?? (year !== null ? pickYearColor(year) : null);
+    const color = colorRaw ? String(colorRaw) : null;
+    const iconSource = item.icon ?? item.marker ?? '';
+    const icon = iconSource ? String(iconSource).trim() : null;
+    const descriptionSource = item.description ?? item.desc ?? item.note ?? '';
+    const description = typeof descriptionSource === 'string' ? descriptionSource.trim() : '';
+    return { label, color, icon, description };
+  }
+
+  function deriveLegendItems(source){
+    if (source && typeof source === 'object'){
+      const inline = source.legend;
+      if (Array.isArray(inline)) return inline;
+      if (inline && typeof inline === 'object' && Array.isArray(inline.items)) return inline.items;
+    }
+    const years = new Set();
+    const pools = [];
+    if (source && typeof source === 'object'){
+      if (Array.isArray(source.points)) pools.push(source.points);
+      if (Array.isArray(source.markers)) pools.push(source.markers);
+      if (Array.isArray(source.lines)) pools.push(source.lines);
+      if (Array.isArray(source.arrows)) pools.push(source.arrows);
+      if (Array.isArray(source.fills)) pools.push(source.fills);
+    }
+    pools.forEach(list => {
+      list.forEach(entry => {
+        const year = parseYear(entry?.year);
+        if (year !== null) years.add(year);
+      });
+    });
+    if (years.size){
+      return Array.from(years).sort((a, b) => a - b).map(year => ({ year }));
+    }
+    return Object.keys(YEAR_COLORS)
+      .map(value => parseYear(value))
+      .filter(value => value !== null)
+      .sort((a, b) => a - b)
+      .map(year => ({ year }));
+  }
+
+  function extractLegendTitle(source){
+    if (!source || typeof source !== 'object') return null;
+    if (typeof source.legendTitle === 'string' && source.legendTitle.trim()) return source.legendTitle.trim();
+    const legendMeta = source.legend;
+    if (legendMeta && typeof legendMeta === 'object'){
+      if (typeof legendMeta.title === 'string' && legendMeta.title.trim()) return legendMeta.title.trim();
+      if (typeof legendMeta.heading === 'string' && legendMeta.heading.trim()) return legendMeta.heading.trim();
+    }
+    return null;
+  }
+
+  function renderLegend(items){
+    if (!legendList) return;
+    legendList.innerHTML = '';
+    items.forEach(entry => {
+      const item = document.createElement('li');
+      item.className = 'map__legend-item';
+      const marker = document.createElement('span');
+      marker.className = 'map__legend-marker';
+      if (entry.color){
+        marker.style.setProperty('--legend-color', entry.color);
+      } else {
+        marker.classList.add('map__legend-marker--empty');
+      }
+      if (entry.icon){
+        const iconEl = document.createElement('span');
+        iconEl.className = 'map__legend-icon';
+        iconEl.textContent = entry.icon;
+        marker.classList.add('map__legend-marker--has-icon');
+        marker.appendChild(iconEl);
+      }
+      item.appendChild(marker);
+      const textWrap = document.createElement('span');
+      textWrap.className = 'map__legend-text';
+      const labelEl = document.createElement('span');
+      labelEl.className = 'map__legend-label';
+      labelEl.textContent = entry.label || '-';
+      textWrap.appendChild(labelEl);
+      if (entry.description){
+        const noteEl = document.createElement('span');
+        noteEl.className = 'map__legend-note';
+        noteEl.textContent = entry.description;
+        textWrap.appendChild(noteEl);
+      }
+      item.appendChild(textWrap);
+      legendList.appendChild(item);
+    });
+  }
+
+  function refreshLegend(source){
+    if (!legend) return;
+    const rawItems = deriveLegendItems(source);
+    const normalized = rawItems.map(normalizeLegendItem).filter(Boolean);
+    const hasItems = normalized.length > 0;
+    if (legendToggle){
+      legendToggle.disabled = !hasItems;
+    }
+    if (legendList){
+      if (!hasItems){
+        legendList.innerHTML = '';
+      } else {
+        renderLegend(normalized);
+      }
+    }
+    if (legendTitleEl){
+      const customTitle = extractLegendTitle(source);
+      legendTitleEl.textContent = customTitle || defaultLegendTitle;
+    }
+    if (legend instanceof HTMLElement){
+      legend.hidden = !hasItems;
+    }
+    closeLegend();
   }
 
   function drawPoint(point){
@@ -269,6 +439,7 @@ export function initMap(options = {}){
     shapes.lines = Array.isArray(data.lines) ? data.lines : [];
     shapes.arrows = Array.isArray(data.arrows) ? data.arrows : [];
     shapes.fills = Array.isArray(data.fills) ? data.fills : [];
+    refreshLegend(data);
     hideInfo();
     draw();
   }
@@ -361,6 +532,11 @@ export function initMap(options = {}){
   stage.addEventListener('pointerleave', hideInfo);
   stage.addEventListener('pointerdown', hideInfo);
 
+  if (legendToggle){
+    legendToggle.addEventListener('click', toggleLegend);
+  }
+
+  refreshLegend({});
   bindFilters();
   draw();
   loadData();
