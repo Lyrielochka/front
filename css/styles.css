@@ -149,7 +149,7 @@
     content:""; position:absolute; inset:-10% -10% -5% -10%;
     background:
       linear-gradient(180deg, rgba(var(--bg-base-rgb),.85), rgba(var(--bg-base-rgb),.2) 40%, rgba(var(--bg-base-rgb),.85)),
-      url('../images/fon.webp') center/cover no-repeat;
+      url('../images/font.webp') center/cover no-repeat;
     filter:grayscale(100%) contrast(1.05) brightness(.6);
     z-index:-2;
   }
