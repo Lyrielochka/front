@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Первая мировая на землях Беларуси</title>
 
-<!-- Шрифты -->
+
 
 
 <link rel="stylesheet" href="css/styles.css">
@@ -18,7 +18,7 @@
   <div class="frame-lines" aria-hidden="true"></div>
   <div class="particles" id="particles" aria-hidden="true"></div>
 
-  <!-- Навигация -->
+
   <nav class="nav" aria-label="Навигация по секциям">
     <a href="#archive">Архив</a>
     <a href="#map">Карта</a>
@@ -29,26 +29,12 @@
   </nav>
   <div class="spacer" aria-hidden="true"></div>
 
-  <!-- HERO -->
+
   <header class="hero" role="banner">
     <div class="smoke" aria-hidden="true"></div>
     <div class="fog" aria-hidden="true"></div>
 
-    <!-- Силуэты (SVG) -->
-    <div class="silhouettes" id="silhouettes" aria-hidden="true">
-      <svg class="sil-1" viewBox="0 0 700 220" preserveAspectRatio="xMinYMax">
-        <path d="M0,220 L0,180 C40,170 70,160 90,150 C120,140 120,120 160,120 C190,120 210,140 240,150 C265,160 300,155 320,150 C350,140 360,120 380,118 C420,116 430,138 470,140 C520,142 540,160 560,170 C580,178 620,180 700,178 L700,220 Z" opacity=".9"/>
-        <path d="M70,150 l28,-40 18,6 -14,44 zM180,120 l18,-26 24,8 -10,30 zM300,148 l36,-24 12,10 -18,22 zM420,120 l40,-26 14,10 -22,28 z" opacity=".95"/>
-      </svg>
-      <svg class="sil-2" viewBox="0 0 620 220" preserveAspectRatio="xMaxYMax">
-        <path d="M0,220 L0,188 C40,186 80,182 120,168 C170,150 210,140 260,142 C300,144 330,160 360,166 C400,172 460,166 520,168 C560,170 596,178 620,184 L620,220 Z" opacity=".92"/>
-        <rect x="390" y="132" width="140" height="18" rx="3"/>
-        <rect x="330" y="148" width="90" height="26" rx="4"/>
-        <circle cx="336" cy="180" r="16"/><circle cx="400" cy="180" r="16"/>
-      </svg>
-    </div>
 
-    <!-- Штамп -->
         <div class="stamp-logo" aria-hidden="true">ПЕРВАЯ МИРОВАЯ<br><span class="stamp-sub">1914–1918</span></div><div class="stamp-info">
       <span class="stamp-label">Подготовила</span>
       <span class="stamp-name">Предеина Ангелина Григорьевна</span>
@@ -66,7 +52,6 @@
       <a class="down" href="#stats">▼ Смотреть дальше</a>
     </div>
 
-    <!-- Кнопка управления звуком -->
     <button class="sound-toggle" id="soundToggle" aria-pressed="false" aria-label="Включить атмосферный звук">
       <span class="dot" aria-hidden="true"></span>
       <span class="label">Звук: выкл</span>
@@ -82,7 +67,6 @@
     </article>
   </section>
 
-  <!-- ВСТУПИТЕЛЬНЫЙ ТЕКСТ (после главной, перед потерями) -->
   <section id="intro" class="wrap reveal">
     <article class="intro">
       <p>Первая мировая война стала одной из самых масштабных трагедий XX века. Для народов бывшей Российской империи она обернулась колоссальными потерями — на фронтах и от последствий военных действий погибло около <strong>2&nbsp;миллионов человек</strong>. Среди них десятки и сотни тысяч были уроженцами белорусских земель, которые оказались в самом центре ожесточённых боёв.</p>
@@ -91,7 +75,6 @@
     </article>
   </section>
 
-  <!-- СТАТИСТИКА -->
   <section id="stats" class="wrap">
     <div class="stats">
       <article class="stat reveal" aria-label="Количество участников из белорусских губерний">
@@ -111,7 +94,6 @@
     </div>
   </section>
 
-  <!-- КАРТА (без улучшений) -->
   <section id="map" class="wrap reveal">
     <div class="map interactive-map" data-map-url="map-data.json" role="region" aria-label="Интерактивная карта боёв за крепость Осовец">
       <div class="map__text">
@@ -145,7 +127,6 @@
   </section>
 
 
-  <!-- ХРОНОЛОГИЯ FULL-BLEED -->
   <section id="timeline" class="timeline-bleed">
     <div class="tl-head">
       <h3>Хронология событий 1914—1918</h3>
@@ -238,8 +219,7 @@
     </div>
   </section>
 
-  <!-- СПРАВКИ (+ глоссарий: просто пометь слова классом .gloss) -->
-  <!-- АРХИВ -->
+
   <section id="archive" class="wrap reveal">
     <div class="archive">
       <header class="archive-head">
@@ -323,7 +303,6 @@
     </div>
   </section>
 
-  <!-- ОСОВЕЦ -->
   <section id="osovets" class="wrap">
     <article class="osovets reveal">
       <h3>Крепость Осовец</h3>
@@ -333,7 +312,6 @@
     </article>
   </section>
 
-  <!-- ГЕРОИ (кликабельно для досье, данные — из JSON по data-id) -->
   <section id="heroes" class="wrap">
     <h3 style="margin:0 0 8px;">Судьбы людей и героизм</h3>
     <p class="sub" style="margin-bottom:16px">Фото • краткая биография • заслуги</p>
@@ -383,7 +361,6 @@
     </div>
   </section>
 
-  <!-- МИФЫ / ФАКТЫ -->
   <section class="wrap">
     <h3 style="margin:0 0 8px;">Мифы и факты</h3>
     <div class="acc reveal">
@@ -437,7 +414,6 @@
   <footer>
     Проект о Первой мировой на землях Беларуси • Создано с любовью и болью  • © Урицкая средняя школа,2025 г.
 
-  <!-- Телеграфная лента -->
   <div class="ticker" role="region" aria-label="Телеграфная лента сводок 1914–1918">
     <div class="label">Сводка</div>
     <div class="viewport">
@@ -453,7 +429,6 @@
     </div>
   </div>
 
-  <!-- МОДАЛ ДЛЯ ГЕРОЯ -->
   <dialog id="heroModal" aria-labelledby="heroTitle">
     <div class="modal-head">
       <div class="modal-title" id="heroTitle">Досье</div>
@@ -468,14 +443,7 @@
     </div>
   </dialog>
 
-  <!-- TOAST -->
   <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
-
-  <!-- Fallback JSON для ГЕРОЕВ (если внешний файл недоступен) -->
-  
-
-  <!-- Fallback JSON для ГЛОССАРИЯ -->
-  
 
 <script type="module" src="js/main.module.js"></script>
 </body>
