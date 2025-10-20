@@ -758,6 +758,24 @@ html.js .reveal{ transition:none }
 @media (min-width:1040px){
   .chronicles-grid{ grid-template-columns:repeat(3, minmax(0, 1fr)); }
 }
+
+@media (max-width:640px){
+  .chronicles-grid{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .chronicles-item{
+    width:auto;
+  }
+  .chronicles-item img{
+    width:min(80vw, 320px);
+  }
+  .chronicles-item figcaption{
+    width:min(80vw, 320px);
+    margin-inline:auto;
+  }
+}
 html.no-js .reveal{ opacity:1 !important; transform:none !important }
 
 
