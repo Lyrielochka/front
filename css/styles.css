@@ -767,6 +767,11 @@ html.js .reveal{ transition:none }
   }
   .chronicles-item{
     width:auto;
+    background:none;
+    border:none;
+    box-shadow:none;
+    border-radius:0;
+    padding:0;
   }
   .chronicles-item img{
     width:min(80vw, 320px);
@@ -774,6 +779,7 @@ html.js .reveal{ transition:none }
   .chronicles-item figcaption{
     width:min(80vw, 320px);
     margin-inline:auto;
+    padding:12px 0 0;
   }
 }
 html.no-js .reveal{ opacity:1 !important; transform:none !important }
