@@ -297,7 +297,17 @@
     .hero{ min-height:calc(100svh - 56px); padding:96px 18px 64px; }
     .hero::before{ transform:scale(1.08); transform-origin:center top; background-position:center 18%; }
     .hero .wrap{ text-align:center; }
-    .hero h1{ font-size:clamp(34px, 11vw, 54px); letter-spacing:.6px; }
+    .hero h1{
+      display:flex; justify-content:flex-end; text-align:right;
+      margin:0 0 12px auto; width:min(320px, 92vw);
+      font-size:clamp(34px, 11vw, 54px); letter-spacing:.34px;
+    }
+    .hero .type{
+      display:inline-block; max-width:100%;
+      white-space:normal; text-align:right;
+      text-wrap:balance; overflow-wrap:break-word; word-break:normal;
+      line-height:1.05; padding-right:2px;
+    }
     .hero p.lead{ font-size:clamp(15px, 4.6vw, 18px); margin-bottom:20px; }
     .badge{ font-size:11px; padding:5px 12px; letter-spacing:.34em; }
     .down{ margin-top:18px; padding:9px 14px; font-size:13px; }
@@ -308,7 +318,8 @@
   }
   @media (max-width:480px){
     .hero{ padding:88px 14px 56px; min-height:calc(100svh - 52px); }
-    .hero h1{ font-size:clamp(30px, 12vw, 46px); }
+    .hero h1{ font-size:clamp(30px, 12vw, 46px); width:min(260px, 90vw); letter-spacing:.18px; }
+    .hero .type{ line-height:1.08; }
     .hero p.lead{ font-size:clamp(14px, 4.8vw, 17px); }
     .badge{ font-size:10px; padding:5px 10px; letter-spacing:.28em; }
     .stamp-logo{ top:12px; left:10px; font-size:clamp(16px, 7vw, 22px); }
