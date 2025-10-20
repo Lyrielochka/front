@@ -20,12 +20,18 @@
 
 
   <nav class="nav" aria-label="Навигация по секциям">
-    <a href="#archive">Архив</a>
-    <a href="#map">Карта</a>
-    <a href="#timeline">Хронология</a>
-    <a href="#facts">Справки</a>
-    <a href="#osovets">Осовец</a>
-    <a href="#heroes">Истории людей</a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+      <span class="nav__toggle-icon" aria-hidden="true"></span>
+      <span class="nav__toggle-text">Меню</span>
+    </button>
+    <div class="nav__links" id="primary-nav">
+      <a href="#archive">Архив</a>
+      <a href="#map">Карта</a>
+      <a href="#timeline">Хронология</a>
+      <a href="#facts">Справки</a>
+      <a href="#osovets">Осовец</a>
+      <a href="#heroes">Истории людей</a>
+    </div>
   </nav>
   <div class="spacer" aria-hidden="true"></div>
 

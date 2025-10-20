@@ -71,9 +71,35 @@
     .brand{font-weight:700; letter-spacing:.3px}
     .brand small{opacity:.65; font-weight:600}
     .toc{
-      display:flex; gap:12px; flex-wrap:wrap; align-items:center; font-size:14px;
+      position:relative; display:flex; gap:12px; flex-wrap:wrap; align-items:center; font-size:14px;
       justify-content:center; width:100%;
     }
+    .toc__links{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:center;
+      width:100%;
+    }
+    .toc__toggle{
+      display:none; align-items:center; gap:10px;
+      padding:8px 13px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.08); background:rgba(28,32,40,.45); color:var(--ink);
+      font-weight:600; text-transform:uppercase; letter-spacing:.28em;
+      cursor:pointer; transition:transform .15s ease, background-color .2s ease, border-color .2s ease;
+    }
+    .toc__toggle:hover, .toc__toggle:focus-visible{ transform:translateY(-1px); outline:none; background:rgba(46,53,64,.55); border-color:rgba(255,255,255,.18); }
+    .toc__toggle-icon{
+      position:relative; display:inline-block; width:18px; height:2px; border-radius:2px; background:currentColor;
+      transition:transform .2s ease, background-color .2s ease;
+    }
+    .toc__toggle-icon::before, .toc__toggle-icon::after{
+      content:""; position:absolute; left:0; width:18px; height:2px; border-radius:2px; background:currentColor;
+      transition:transform .2s ease, opacity .2s ease;
+    }
+    .toc__toggle-icon::before{ transform:translateY(-6px); }
+    .toc__toggle-icon::after{ transform:translateY(6px); }
+    .toc.is-open .toc__toggle-icon{ background:transparent; }
+    .toc.is-open .toc__toggle-icon::before{ transform:translateY(0) rotate(45deg); }
+    .toc.is-open .toc__toggle-icon::after{ transform:translateY(0) rotate(-45deg); }
+    body.toc-open{ overflow:hidden; }
     .toc a{
       color:var(--muted); text-decoration:none; padding:6px 10px; border-radius:999px;
       backdrop-filter:var(--blur);
@@ -82,6 +108,27 @@
       transition:all .25s ease; white-space:nowrap;
     }
     .toc a:hover, .toc a.is-active{color:var(--ink); border-color:rgba(255,255,255,.18); background:rgba(46,53,64,.55)}
+    @media (max-width:860px){
+      .topbar-inner{ flex-direction:row; align-items:center; justify-content:space-between; text-align:left; gap:12px; padding:10px clamp(14px,5vw,22px); }
+      .brand{ text-align:left; }
+      .toc{ width:auto; justify-content:flex-end; }
+      .toc__links{
+        position:fixed; top:calc(env(safe-area-inset-top, 0px) + 66px); left:16px; right:16px;
+        flex-direction:column; align-items:stretch; gap:10px;
+        padding:16px 14px; border-radius:16px; border:1px solid rgba(255,255,255,.12);
+        background:rgba(16,20,26,.94); box-shadow:0 16px 32px rgba(0,0,0,.38);
+        pointer-events:none; opacity:0; transform:translateY(-12px) scale(.96);
+        transition:opacity .22s ease, transform .22s ease; z-index:60;
+      }
+      .toc__links a{ width:100%; text-align:center; padding:10px 14px; }
+      .toc.is-open .toc__links{ opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
+      .toc__toggle{ display:inline-flex; font-size:12px; letter-spacing:.24em; }
+    }
+    @media (max-width:520px){
+      .topbar-inner{ padding:8px 12px; }
+      .toc__toggle{ font-size:11px; letter-spacing:.2em; padding:7px 11px; }
+      .toc__links{ left:12px; right:12px; }
+    }
 
     .back-fab{
       position:fixed;
@@ -399,16 +446,22 @@
     <div class="topbar-inner">
       <div class="brand">Осовец — <small>«Атака мёртвецов», 1915</small></div>
       <nav class="toc" aria-label="Навигация по разделам">
-        <a href="#brief">Кратко</a>
-        <a href="#where">Где это</a>
-        <a href="#background">Предыстория</a>
-        <a href="#gas">Газовая атака</a>
-        <a href="#counter">Контратака</a>
-        <a href="#aftermath">Итоги</a>
-        <a href="#people">Участники</a>
-        <a href="#memory">Память</a>
-        <a href="#sources">Источники</a>
-        <a href="#videos">Видеоматериалы</a>
+        <button class="toc__toggle" type="button" aria-expanded="false" aria-controls="toc-links">
+          <span class="toc__toggle-icon" aria-hidden="true"></span>
+          <span class="toc__toggle-text">Меню</span>
+        </button>
+        <div class="toc__links" id="toc-links">
+          <a href="#brief">Кратко</a>
+          <a href="#where">Где это</a>
+          <a href="#background">Предыстория</a>
+          <a href="#gas">Газовая атака</a>
+          <a href="#counter">Контратака</a>
+          <a href="#aftermath">Итоги</a>
+          <a href="#people">Участники</a>
+          <a href="#memory">Память</a>
+          <a href="#sources">Источники</a>
+          <a href="#videos">Видеоматериалы</a>
+        </div>
       </nav>
     </div>
   </div>
@@ -746,6 +799,57 @@
     const progress = document.getElementById('progress');
     const toTop = document.getElementById('toTop');
     const links = [...document.querySelectorAll('.toc a')];
+    const toc = document.querySelector('.toc');
+    const tocToggle = toc ? toc.querySelector('.toc__toggle') : null;
+    const tocLinks = toc ? [...toc.querySelectorAll('.toc__links a')] : [];
+
+    const closeToc = (focusToggle = false) => {
+      if(!toc || !toc.classList.contains('is-open')) return;
+      toc.classList.remove('is-open');
+      document.body.classList.remove('toc-open');
+      if(tocToggle){
+        tocToggle.setAttribute('aria-expanded', 'false');
+        if(focusToggle) tocToggle.focus();
+      }
+    };
+
+    const openToc = () => {
+      if(!toc || !tocToggle || toc.classList.contains('is-open')) return;
+      toc.classList.add('is-open');
+      document.body.classList.add('toc-open');
+      tocToggle.setAttribute('aria-expanded', 'true');
+    };
+
+    if(tocToggle){
+      tocToggle.addEventListener('click', () => {
+        if(toc.classList.contains('is-open')){
+          closeToc();
+        }else{
+          openToc();
+        }
+      });
+    }
+
+    tocLinks.forEach(link => link.addEventListener('click', () => closeToc()));
+
+    document.addEventListener('click', (event) => {
+      if(!toc || !toc.classList.contains('is-open')) return;
+      if(toc.contains(event.target)) return;
+      closeToc();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if(event.key === 'Escape'){
+        closeToc(true);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if(window.innerWidth > 860){
+        closeToc();
+      }
+    }, { passive: true });
+
     const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
 
     function setProgress(){

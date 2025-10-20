@@ -12,12 +12,14 @@ import { initGlossary } from './glossary.js';
 import glossaryFallback from './fallback/glossary.js';
 import heroesFallback from './fallback/heroes.js';
 import { initParticles } from './particles.js';
+import { initNav } from './nav.js';
 import { initMap } from './map.js';
 
 async function run(){
   document.documentElement.classList.add('js');
   document.documentElement.classList.remove('no-js');
   try{
+    initNav();
     initAnchorScroll();
     initReveal();
     initCounters();
